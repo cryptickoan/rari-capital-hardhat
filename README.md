@@ -20,7 +20,7 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
 
 3. Run
 
-		`npx hardhat compilation`
+		`npx hardhat compile`
         
 4. Start hardhat node
 
