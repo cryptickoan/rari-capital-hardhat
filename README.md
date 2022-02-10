@@ -30,7 +30,7 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
       
 5. Open a second terminal and run:
 
-		`npx hardhat --network localhost run scripts/deploy_fuse.ts
+		`npx hardhat --network localhost run scripts/deploy-fuse.ts
         
       This will deploy a clean instance of fuse in your localnode.
       
@@ -39,7 +39,7 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
 
 - To deploy an empty pool
 
-		npx hardhat --network localhost run scripts/deploy_empty_pool.ts
+		npx hardhat --network localhost run scripts/deploy-empty-pool.ts
 
 - To deploy a pool with one cToken/market
 
