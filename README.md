@@ -49,7 +49,7 @@ These two scripts will output the deployed pool's comptroller address which you 
 
 - To deploy a rewards distributor
 
-		npx hardhat --network localhost run scripts/deploy-rewards-distributor.ts poolAddress
+		npx hardhat --network localhost run scripts/deploy-rewards-distributor.ts 
 
 - To deploy a cToken
 
