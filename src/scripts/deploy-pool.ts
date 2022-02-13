@@ -2,7 +2,7 @@ import { providers } from 'ethers';
 import { ethers } from 'hardhat';
 import { parseUnits, parseEther } from '@ethersproject/units';
 import { WeiPerEther } from '@ethersproject/constants'
-import { Fuse } from '../cjs/index';
+import { Fuse } from '../../cjs/index';
 
 async function main() {
     const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')

@@ -28,6 +28,7 @@ async function main() {
     await ethers.getContractFactory("FusePoolLensSecondary")
   ).deploy();
 
+
   // 5. Initiate Lens
   await Lens.initialize(FusePoolDirectory.address);
   await LensSecondary.initialize(FusePoolDirectory.address);

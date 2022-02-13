@@ -1,7 +1,7 @@
 import { providers } from 'ethers';
 import { ethers } from 'hardhat';
 import { parseUnits } from '@ethersproject/units';
-import { Fuse } from '../cjs/index';
+import { Fuse } from '../../cjs/index';
 
 export async function deployEmptyPool() {
     const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
