@@ -21,7 +21,7 @@ export async function addRdToPool(
     comptrollerAddress: string,
     comptrollerAdmin: string,
 ) {
-    // 2. 
+    // 1. Initiate comptroller contract.
     const functionInterface = [
         'function _addRewardsDistributor(address RdAddress)'
     ]
@@ -32,6 +32,7 @@ export async function addRdToPool(
         fuse.provider.getSigner(comptrollerAdmin)
     )
 
+    // 2. Add rd to comptroller.
     try {
         await comptrollerContract._addRewardsDistributor(rdAddress)
         console.info(
