@@ -15,21 +15,6 @@ export async function deployEmptyPool(
   hre: HardhatRuntimeEnvironment, 
   address: string
 ) {
-        try {
-                await fuse.contracts.FusePoolDirectory.callStatic.owner()
-        } catch(e: any) {
-                console.log(colors.red(
-                        "Transaction failed: "
-                         ))
-
-                console.log(e)
-
-                console.log(colors.yellow(
-                        "Please run deploy-fuse task before running this task. You may need to reset your node."
-                ))
-                return
-        }
-
         // 1. Deploy Price Oracle
         const priceOracleAddress = await fuse.deployPriceOracle(
                 "MasterPriceOracle",
