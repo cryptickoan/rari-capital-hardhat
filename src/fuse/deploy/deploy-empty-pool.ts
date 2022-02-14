@@ -57,9 +57,5 @@ export async function deployEmptyPool(
                 isWhitelisted ? [] : null
         );
 
-        console.log(colors.green('Deployed pool successfully!'))
-
-        console.table(
-                {contract: "Pool comptroller", address: _poolAddress}
-        )
+        return _poolAddress
 }
