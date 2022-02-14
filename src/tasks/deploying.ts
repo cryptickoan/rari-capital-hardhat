@@ -45,6 +45,9 @@ task('deploy-pool', 'Deploys an empty pool', async (taskArgs, hre) => {
 task('deploy-market', 'Deploys an asset to the given comptroller.')
         .addParam('comptroller', "Pool's comptroller address.")
         .addParam('underlying', "Underlying asset's address for the cToken. e.g DAI address")
+        .addOptionalParam('cfactor', "CollateralFactor. Will determine loan to value ratio. Its a percentage so it should be between 0 - 1.")
+        .addOptionalParam('rfactor', "ReserveFactor. Will determine ratio of fees to go to the reserve. Its a percentage so it should be between 0 - 1.")
+        .addOptionalParam('adminfee', "Will determine percentage admin fee. Its a percentage so it should be between 0 - 1.")
         .setAction( async (taskArgs, hre) => {
        // User address. 
         //  - Using hardhat default addresses.
@@ -59,12 +62,21 @@ task('deploy-market', 'Deploys an asset to the given comptroller.')
         const fuse = new Fuse(provider, 31337);
         
         // 1. Deploy market.
+        console.info(
+                colors.green(
+                        "Initiating market deployment."
+                )
+        )
+
         try {
                 await deployMarket(
                         fuse,
                         taskArgs.comptroller, 
                         address,
-                        taskArgs.underlying
+                        taskArgs.underlying,
+                        taskArgs.cfactor ?? 0.5,
+                        taskArgs.rfactor ?? 0.1,
+                        taskArgs.adminFee ?? 0.05
                 );
         } catch (e) {
                 console.error(e)
@@ -85,13 +97,19 @@ task('deploy-market', 'Deploys an asset to the given comptroller.')
                 "latest"
         );
 
-        // Done
-        console.log(colors.green("Deployed asset sucessfully!"))
+        // Done!
+        console.log(
+                colors.green(
+                        "Deployed asset sucessfully!"
+                )
+        )
 
-        console.table([
-          {contract: "cToken delegate", address: events.slice(-1)[0].args[0]}
-        ])
-
+        console.table(
+                {
+                  contract: "cToken delegate", 
+                  address: events.slice(-1)[0].args[0]
+                }
+        )
 })
 
 task('deploy-rd-to-pool')
