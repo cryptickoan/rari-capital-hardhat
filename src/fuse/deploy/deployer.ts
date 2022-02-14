@@ -1,13 +1,12 @@
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 // Types
 import { Signer } from "ethers";
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { FusePoolLens, FusePoolLensSecondary } from '../../../typechain';
 
 // Colors
 import colors from 'colors';
-
 
 export class FuseDeployment {
     public declare readonly deployer: Signer;

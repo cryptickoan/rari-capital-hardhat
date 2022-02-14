@@ -1,7 +1,9 @@
+// Ethers
 import { parseEther } from '@ethersproject/units';
 import { WeiPerEther } from '@ethersproject/constants'
+
+// Types
 import { Fuse } from '../../../cjs/index';
-import colors from 'colors';
 
 /**
  * @param fuse - An initiated Fuse instance

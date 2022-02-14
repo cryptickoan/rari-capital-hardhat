@@ -1,9 +1,9 @@
-import { providers } from 'ethers';
-import { ethers } from 'hardhat';
-import { parseUnits } from '@ethersproject/units';
+// Types
 import { Fuse } from '../../../cjs/index';
-import colors from 'colors';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+
+// Colors
+import colors from 'colors';
 
 /**
  * @param fuse - An initiated fuse sdk instance.

@@ -1,3 +1,4 @@
+// Types
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { Fuse } from "../../../cjs"
 
