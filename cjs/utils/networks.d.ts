@@ -87,6 +87,15 @@ export declare const chainMetadata: {
         blockExplorerURL: string;
         color: string;
     };
+    31337: {
+        chainId: ChainID;
+        name: string;
+        imageUrl: string;
+        supported: boolean;
+        rpcUrl: string;
+        blockExplorerURL: string;
+        color: string;
+    };
 };
 export declare const isSupportedChainId: (chainId: number) => boolean;
 export declare function getSupportedChains(): ChainMetadata[];
