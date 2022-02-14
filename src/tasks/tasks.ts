@@ -6,8 +6,8 @@ import { FuseDeployment } from '../fuse/deployer';
 import Fuse from '../../cjs/Fuse';
 
 import colors from 'colors';
-import { deployEmptyPool } from '../scripts/deploy-empty-pool';
-import { deployMarket } from '../scripts/deploy-market';
+import { deployEmptyPool } from '../fuse/deploy-empty-pool';
+import { deployMarket } from '../fuse/deploy-market';
 
 
 task('deploy-fuse', 'Deploys a clean fuse instance', async (taskArgs, hre) => {
