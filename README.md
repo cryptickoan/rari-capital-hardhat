@@ -30,7 +30,7 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
       
 5. Open a second terminal and run:
 
-		npx hardhat --network localhost run scripts/deploy-fuse.ts
+		npx hardhat deploy-fuse --network localhost 
         
       This will deploy a clean instance of fuse in your localnode.
       
