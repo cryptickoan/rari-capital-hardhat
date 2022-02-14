@@ -12,7 +12,7 @@ import { FuseDeployment } from '../fuse/deploy/deployer';
 import { deployEmptyPool } from '../fuse/deploy/deploy-empty-pool';
 import { deployMarket } from '../fuse/deploy/deploy-market';
 import { deployRdToPool } from '../fuse/deploy/deploy-rewards-distributor-to-pool';
-import { configureEnv } from '../utils';
+import { configureEnv, check } from '../utils';
 
 
 task('deploy-fuse', 'Deploys a clean fuse instance', async (taskArgs, hre) => {
@@ -23,7 +23,8 @@ task('deploy-fuse', 'Deploys a clean fuse instance', async (taskArgs, hre) => {
 })
 
 task('deploy-pool', 'Deploys an empty pool', async (taskArgs, hre) => {
-        const { fuse, address } = await configureEnv(hre)
+        const { fuse, address, fuseDeployed} = await configureEnv(hre)
+        if (!fuseDeployed) return
 
         // 1. Deploy pool.
         console.info(
@@ -46,7 +47,8 @@ task('deploy-market', 'Deploys an asset to the given comptroller.')
         .addOptionalParam('rfactor', "ReserveFactor. Will determine ratio of fees to go to the reserve. Its a percentage so it should be between 0 - 1.")
         .addOptionalParam('adminfee', "Will determine percentage admin fee. Its a percentage so it should be between 0 - 1.")
         .setAction( async (taskArgs, hre) => {
-        const { fuse, address } = await configureEnv(hre)
+        const { fuse, address, fuseDeployed } = await configureEnv(hre)
+        if (!fuseDeployed) return
         
         // 1. Deploy market.
         console.info(
@@ -104,7 +106,8 @@ task('deploy-rd-to-pool')
         .addParam('comptroller', "Comptroller address to which the rewards distributor will be added to.")
         .addOptionalParam('rdDeployer', "If present this address will be used to deploy the rewards")
         .setAction(async (taskArgs, hre) => {
-                const {fuse, address} = await configureEnv(hre)
+                const {fuse, address, fuseDeployed} = await configureEnv(hre)
+                if (!fuseDeployed) return
 
                 try {
                         await deployRdToPool(
