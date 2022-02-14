@@ -83,21 +83,23 @@ export class FuseDeployment {
     }
 
     async deploy() {
-         console.log(colors.yellow("Initiating deployment."))
+         console.info(colors.yellow("Initiating deployment."))
 
         const directory = await this.deployFuseDirectory();
-         console.log(colors.green("Directory address: "), directory);
-        
         const liquidator = await this.deploySafeLiquidator();
-         console.log(colors.green("Safe liquidator address: "), liquidator);
-        
         const distributor = await this.deployFeeDistributor();
-         console.log(colors.green("Fee distributor address: "), distributor);
-
         const lens = await this.deployLens();
-         console.log(colors.green("Primary lens address: ") + lens[0]);
-         console.log(colors.green("Secondary lens address: ") + lens[1]);
+
+        console.table([
+            {contract: "Directory: ", address: directory},
+            {contract: "Safe liquidator: ", address: liquidator},
+            {contract: "Fee distributor: ", address: distributor},
+            {contract: "Primary lens: ", address: lens[0]},
+            {contract: "Secondary lens: ", address: lens[1]},
+        ])
        
-         console.log(colors.yellow("Fuse deployed successfully."))
+        console.info(colors.green("Fuse deployed successfully."))
+
+         
     }
 }
