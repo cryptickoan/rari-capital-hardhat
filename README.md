@@ -54,7 +54,10 @@ These task will output the deployed pool's comptroller address which you will ne
         
 - To deploy a rewards distributor
 
-		npx hardhat --network localhost run scripts/deploy-rewards-distributor.ts 
+		npx hardhat deploy-rd-to-pool 
+        --underlying ${address of token to be distributed}
+        --comptroller ${pool's comptroller address}  
+        --network localhost
 
 - To get the pool's information:
 
