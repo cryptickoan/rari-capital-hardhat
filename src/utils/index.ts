@@ -4,6 +4,9 @@ import { Fuse } from "../../cjs";
 // Types
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
+// Colors
+import colors from 'colors';
+
 export const configureEnv = async (
     hre: HardhatRuntimeEnvironment
 ) => {
@@ -19,9 +22,31 @@ export const configureEnv = async (
     const provider = new hre.ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
     const fuse = new Fuse(provider, 31337);
 
+    // 0. Check fuse was deployed.
+    const fuseDeployed = await check(fuse)
+
     return {
         address,
         provider,
-        fuse
+        fuse,
+        fuseDeployed
+    }
+}
+
+export const check = async (fuse: Fuse) => {
+    try {
+        await fuse.contracts.FusePoolDirectory.callStatic.owner()
+        return true
+    } catch(e: any) {
+            console.log(colors.red(
+                    "Transaction failed: "
+                    ))
+
+            console.log(e)
+
+            console.log(colors.yellow(
+                    "Please run deploy-fuse task before running this task. You may need to reset your node."
+            ))
+            return false
     }
 }
