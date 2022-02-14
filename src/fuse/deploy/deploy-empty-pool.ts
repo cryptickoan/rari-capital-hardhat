@@ -6,9 +6,9 @@ import colors from 'colors';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 /**
- * @param fuse an initiated fuse sdk instance.
- * @param hre Hardhat runtime environment, passed from task.
- * @param address user's address.
+ * @param fuse - An initiated fuse sdk instance.
+ * @param hre - Hardhat runtime environment, passed from task.
+ * @param address - User's address.
  */
 export async function deployEmptyPool(
   fuse: Fuse, 

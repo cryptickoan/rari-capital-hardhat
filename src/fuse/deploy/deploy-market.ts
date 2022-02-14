@@ -4,10 +4,10 @@ import { Fuse } from '../../../cjs/index';
 import colors from 'colors';
 
 /**
- * @param fuse an initiated Fuse instance
- * @param _poolAddress the comptroller's address.
- * @param address the user's address.
- * @param underlyingAsset the underlying asset's address. i.e "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" for USDC.
+ * @param fuse - An initiated Fuse instance
+ * @param _poolAddress - The comptroller's address.
+ * @param address - The user's address.
+ * @param underlyingAsset - The underlying asset's address. i.e "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" for USDC.
  */
 export async function deployMarket(
   fuse: Fuse,

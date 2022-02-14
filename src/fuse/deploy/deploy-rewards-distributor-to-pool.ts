@@ -9,12 +9,12 @@ import colors from 'colors';
 import { addRdToPool } from '../comptroller-interactions/add-rd';
 
 /**
- * @param fuse an initiated fuse sdk instance.
- * @param hre Hardhat runtime environment passed from task.
- * @param underlying address of token to distribute. i.e for DAI 0x6b175474e89094c44da98b954eedeac495271d0f.
- * @param comptrollerAddress address of comptroller that the rewards distributor will be added to.
- * @param comptrollerAdmin comptroller admin's address
- * @param address - optional. If present it'll be used as the address that deploys the reward distributor. 
+ * @param fuse - An initiated fuse sdk instance.
+ * @param hre - Hardhat runtime environment passed from task.
+ * @param underlying - Address of token to distribute. i.e for DAI 0x6b175474e89094c44da98b954eedeac495271d0f.
+ * @param comptrollerAddress - Address of comptroller that the rewards distributor will be added to.
+ * @param comptrollerAdmin - Comptroller admin's address
+ * @param address - Optional. If present it'll be used as the address that deploys the reward distributor. 
  */
 export async function deployRdToPool(
     fuse: Fuse,
