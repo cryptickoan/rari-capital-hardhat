@@ -4,7 +4,7 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
 
 1. You first run 
 
-		` npm install `
+		npm install 
 
 2. The next step is compilation but one contract needs to be modified before because of incompatible solidity compilator versions
 
@@ -20,17 +20,17 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
 
 3. Run
 
-		`npx hardhat compile`
+		npx hardhat compile
         
 4. Start hardhat node
 
-		`npx hardhat node`
+		npx hardhat node
         
       This will start a mainnet fork pinned at block: 14167154
       
 5. Open a second terminal and run:
 
-		`npx hardhat --network localhost run scripts/deploy-fuse.ts
+		npx hardhat --network localhost run scripts/deploy-fuse.ts
         
       This will deploy a clean instance of fuse in your localnode.
       
