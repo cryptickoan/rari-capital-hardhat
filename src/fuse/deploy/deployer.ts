@@ -3,7 +3,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 // Types
 import { Signer } from "ethers";
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { FusePoolLens, FusePoolLensSecondary } from '../../typechain';
+import { FusePoolLens, FusePoolLensSecondary } from '../../../typechain';
 
 // Colors
 import colors from 'colors';
@@ -24,7 +24,6 @@ export class FuseDeployment {
     }
 
     async deployFuseDirectory() {
-        // 1. Deploy FusePoolDirectory
         const FusePoolDirectoryContractFactory = await this.hre.ethers.getContractFactory(
             "FusePoolDirectory"
         );
@@ -34,7 +33,6 @@ export class FuseDeployment {
     }
 
     async deploySafeLiquidator() {
-        // 2. Deploy FuseSafeLiquidator
         const SafeLiquidatorContractFactory = await this.hre.ethers.getContractFactory(
             "FuseSafeLiquidator"
         );
@@ -55,7 +53,6 @@ export class FuseDeployment {
     }
 
     async deployLens() {
-        // 4. Deploy Lens
         const Lens = await (
             await this.hre.ethers.getContractFactory("FusePoolLens")
         ).deploy();

@@ -1,10 +1,15 @@
 import { providers } from 'ethers';
 import { ethers } from 'hardhat';
 import { parseUnits } from '@ethersproject/units';
-import { Fuse } from '../../cjs/index';
+import { Fuse } from '../../../cjs/index';
 import colors from 'colors';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
+/**
+ * @param fuse an initiated fuse sdk instance.
+ * @param hre Hardhat runtime environment, passed from task.
+ * @param address user's address.
+ */
 export async function deployEmptyPool(
   fuse: Fuse, 
   hre: HardhatRuntimeEnvironment, 

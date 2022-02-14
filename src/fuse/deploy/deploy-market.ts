@@ -1,13 +1,13 @@
 import { parseEther } from '@ethersproject/units';
 import { WeiPerEther } from '@ethersproject/constants'
-import { Fuse } from '../../cjs/index';
+import { Fuse } from '../../../cjs/index';
 import colors from 'colors';
 
 /**
- * 
  * @param fuse an initiated Fuse instance
  * @param _poolAddress the comptroller's address.
  * @param address the user's address.
+ * @param underlyingAsset the underlying asset's address. i.e "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" for USDC.
  */
 export async function deployMarket(
   fuse: Fuse,
@@ -60,10 +60,4 @@ export async function deployMarket(
       // TODO: Disable this. This bypasses the price feed check. Only using now because only trusted partners are deploying assets.
       true
     );
-
-    console.log(colors.green("Deployed asset sucessfully!"))
-
-    console.table([
-      {contract: "cToken delegate", address: asset[0]}
-    ])
 }
