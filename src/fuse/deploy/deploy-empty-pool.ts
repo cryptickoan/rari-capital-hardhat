@@ -74,7 +74,7 @@ export async function deployEmptyPool(
 
         console.log(colors.green('Deployed pool successfully!'))
 
-        console.table([
+        console.table(
                 {contract: "Pool comptroller", address: _poolAddress}
-        ])
+        )
 }
