@@ -37,26 +37,30 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
       
 ### Available scripts:  
 
-- To deploy an empty pool
+##### make sure to run step 5 before using tasks below.
 
-		npx hardhat --network localhost run scripts/deploy-empty-pool.ts
+- To deploy an empty pool:
 
-- To deploy a pool with one cToken/market
+		npx hardhat deploy-pool --network localhost
+		
+These task will output the deployed pool's comptroller address which you will need to run the tasks below:
 
-		npx hardhat --network localhost run scripts/deploy_pool.ts
+- To deploy a cToken/market:
+
+		npx hardhat deploy-market 
+        --comptroller ${pool's comptroller address} 
+        --underlying ${underlying token address} 
+        --network localhost
         
-These two scripts will output the deployed pool's comptroller address which you will need to run the scripts below:
-
 - To deploy a rewards distributor
 
 		npx hardhat --network localhost run scripts/deploy-rewards-distributor.ts 
 
-- To deploy a cToken
+- To get the pool's information:
 
-		npx hardhat --nework localhost run scripts/deploy-market.ts
-        
-        
-   **more scripts in development**
+        npx hardhat get-pool-info 
+        --comptroller ${pool's comptroller address} 
+        --network localhost
         
 
 <!-- 
