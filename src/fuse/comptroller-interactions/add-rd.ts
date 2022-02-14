@@ -8,11 +8,11 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import colors from 'colors';
 
 /**
- * @param fuse an initiated fuse sdk instance.
- * @param hre Hardhat runtime environment passed from task.
- * @param RdAddress rewards distributor's address.
- * @param comptrollerAddress address of comptroller that the rewards distributor will be added to.
- * @param comptrollerAdmin comptroller admin's address
+ * @param fuse - An initiated fuse sdk instance.
+ * @param hre - Hardhat runtime environment passed from task.
+ * @param RdAddress - Rewards distributor's address.
+ * @param comptrollerAddress - Address of comptroller that the rewards distributor will be added to.
+ * @param comptrollerAdmin - Comptroller admin's address
  */
 export async function addRdToPool(
     fuse: Fuse,
