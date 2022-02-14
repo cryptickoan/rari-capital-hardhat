@@ -31,14 +31,11 @@ export async function addRdToPool(
     )
 
     // 2. Add rd to comptroller.
-    try {
-        await comptrollerContract._addRewardsDistributor(rdAddress)
-        console.info(
-            colors.green(
-                "Comptroller configuration successful. Rewards distributor was added to your pool"
-            )
+    await comptrollerContract._addRewardsDistributor(rdAddress)
+    
+    console.info(
+        colors.green(
+            "Comptroller configuration successful. Rewards distributor was added to your pool"
         )
-    } catch (e) {
-        console.log(e)
-    }
+    )
 }
