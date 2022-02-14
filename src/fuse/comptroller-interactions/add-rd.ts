@@ -1,5 +1,3 @@
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-
 // Types
 import { Fuse } from '../../../cjs';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
