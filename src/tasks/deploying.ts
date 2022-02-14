@@ -1,13 +1,17 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 
-// Fuse
-import { FuseDeployment } from '../fuse/deployer';
+// Fuse SDK
 import Fuse from '../../cjs/Fuse';
 
+// Colors
 import colors from 'colors';
-import { deployEmptyPool } from '../fuse/deploy-empty-pool';
-import { deployMarket } from '../fuse/deploy-market';
+
+// Hardhat helpers
+import { FuseDeployment } from '../fuse/deploy/deployer';
+import { deployEmptyPool } from '../fuse/deploy/deploy-empty-pool';
+import { deployMarket } from '../fuse/deploy/deploy-market';
+import { getPoolInfo } from '../fuse/info/get-pool-info';
 
 
 task('deploy-fuse', 'Deploys a clean fuse instance', async (taskArgs, hre) => {
@@ -37,11 +41,13 @@ task('deploy-pool', 'Deploys an empty pool', async (taskArgs, hre) => {
         }
 })
 
-task('deploy-asset', 'Deploys an asset to the given comptroller.', async (taskArgs, hre) => {
+task('deploy-market', 'Deploys an asset to the given comptroller.')
+        .addParam('comptroller', "Pool's comptroller address.")
+        .addParam('underlying', "Underlying asset's address for the cToken. e.g DAI address")
+        .setAction( async (taskArgs, hre) => {
        // User address. 
         //  - Using hardhat default addresses.
         const address = (await hre.ethers.getSigners())[0].address;
-        const _poolAddress = "0x42053c258b5cd0b7f575e180DE4B90763cC2358b";
 
         // Initiate a fuse sdk instance.
         //  - Contract addresses are preset to the ones that would be created if
@@ -51,16 +57,39 @@ task('deploy-asset', 'Deploys an asset to the given comptroller.', async (taskAr
         const provider = new hre.ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
         const fuse = new Fuse(provider, 31337);
         
+        // 1. Deploy market.
         try {
                 await deployMarket(
                         fuse,
-                        _poolAddress, 
+                        taskArgs.comptroller, 
                         address,
-                        "0x6b175474e89094c44da98b954eedeac495271d0f"
+                        taskArgs.underlying
                 );
         } catch (e) {
                 console.error(e)
         }
+
+        // 2. Filter events to get cToken address.
+        const comptrollerContract = new hre.ethers.Contract(
+                taskArgs.comptroller,
+                JSON.parse(
+                        fuse.compoundContracts["contracts/Comptroller.sol:Comptroller"].abi
+                      ),
+                fuse.provider
+            )   
+        
+        let events: any = await comptrollerContract.queryFilter(
+                comptrollerContract.filters.MarketListed() ,
+                (await fuse.provider.getBlockNumber()) - 10,
+                "latest"
+        );
+
+        // Done
+        console.log(colors.green("Deployed asset sucessfully!"))
+
+        console.table([
+          {contract: "cToken delegate", address: events.slice(-1)[0].args[0]}
+        ])
+
 })
 
-task('deploy-')
