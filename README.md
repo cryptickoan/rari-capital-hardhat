@@ -51,6 +51,10 @@ These task will output the deployed pool's comptroller address which you will ne
         --comptroller ${pool's comptroller address} 
         --underlying ${underlying token address} 
         --network localhost
+        --cfactor ${collateral factor. If 50% user will only be able to borrow 50% of their collateral value}
+        --rfactor ${reserve factor. Percentage that will go to reserves.}
+        --adminfee ${Percentage admin fee.}
+    ###### last 3 args should be a number between 0 and 1.
         
 - To deploy a rewards distributor
 
