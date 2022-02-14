@@ -4,6 +4,8 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 // Colors
 import colors from 'colors';
+
+// Function
 import { addRdToPool } from '../comptroller-interactions/add-rd';
 
 /**
