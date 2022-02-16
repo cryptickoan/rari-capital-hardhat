@@ -33,11 +33,18 @@ task('deploy-pool', 'Deploys an empty pool', async (taskArgs, hre) => {
                 )
         )
 
+        let comptrollerAddress
         try {
-                await deployEmptyPool(fuse, hre, address);
+                comptrollerAddress = await deployEmptyPool(fuse, hre, address);
         } catch (e) {
                 console.error(e);
         }
+
+        console.log(colors.green('Deployed pool successfully!'))
+
+        console.table(
+                {contract: "Pool comptroller", address: comptrollerAddress}
+        )
 })
 
 task('deploy-market', 'Deploys an asset to the given comptroller.')

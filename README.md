@@ -47,27 +47,16 @@ These task will output the deployed pool's comptroller address which you will ne
 
 - To deploy a cToken/market:
 
-		npx hardhat deploy-market 
-        --comptroller ${pool's comptroller address} 
-        --underlying ${underlying token address} 
-        --network localhost
-        --cfactor ${collateral factor. If 50% user will only be able to borrow 50% of their collateral value}
-        --rfactor ${reserve factor. Percentage that will go to reserves.}
-        --adminfee ${Percentage admin fee.}
-    ###### last 3 args should be a number between 0 and 1.
+		npx hardhat deploy-market --comptroller ${pool's comptroller address} --underlying ${underlying token address} --network localhost --cfactor ${collateral factor. If 50% user will only be able to borrow 50% of their collateral value} --rfactor ${reserve factor. Percentage that will go to reserves.} --adminfee ${Percentage admin fee.}
+    ###### last 3 args are optional and should be a number between 0 and 1.
         
 - To deploy a rewards distributor
 
-		npx hardhat deploy-rd-to-pool 
-        --underlying ${address of token to be distributed}
-        --comptroller ${pool's comptroller address}  
-        --network localhost
+		npx hardhat deploy-rd-to-pool --underlying ${address of token to be distributed} --comptroller ${pool's comptroller address}  --network localhost
 
 - To get the pool's information:
 
-        npx hardhat get-pool-info 
-        --comptroller ${pool's comptroller address} 
-        --network localhost
+        npx hardhat get-pool-info --comptroller ${pool's comptroller address} --network localhost
         
 
 <!-- 
