@@ -1,9 +1,8 @@
 
 // Types
-import { Signer } from "ethers";
+import { Contract, Signer } from "ethers";
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { FusePoolLens, FusePoolLensSecondary } from '../../../typechain';
 
 // Colors
 import colors from 'colors';
@@ -68,8 +67,8 @@ export class FuseDeployment {
     }
 
     async initiateLens(
-        Lens: FusePoolLens, 
-        LensSecondary: FusePoolLensSecondary
+        Lens: Contract, 
+        LensSecondary: Contract
     ) {
         if (this.FuseDirectoryAddress) {
             // 5. Initiate Lens
