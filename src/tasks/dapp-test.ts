@@ -1,8 +1,6 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 
-// Fuse SDK
-import Fuse from '../../cjs/Fuse';
 
 // Colors
 import colors from 'colors';
