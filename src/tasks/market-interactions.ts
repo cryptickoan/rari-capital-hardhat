@@ -1,8 +1,8 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
-import { supplyCEther } from '../fuse/comptroller-interactions/supply/cEth';
 
 // Fuse SDK
+import { supplyCEther } from '../fuse/comptroller-interactions/supply/cEth';
 import { supplyCToken } from '../fuse/comptroller-interactions/supply/cToken';
 
 // Hardhat helpers
