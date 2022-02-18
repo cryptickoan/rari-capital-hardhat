@@ -7,9 +7,9 @@ import { testForCTokenErrorAndSend } from "../utils/testForCTokenErrorAndSend";
 
 /**
  * @param fuse - An initiated fuse sdk instance.
- * @param tokenAddress - Address of token to supply. i.e "0xa0b8..48" for USDC.
  * @param provider - An initiated ethers provider.
  * @param userAddress - The depositing user address.
+ * @param tokenAddress - Address of token to supply. i.e "0xa0b8..48" for USDC.
  * @param marketAddress - The markets/ctoken address. This is where funds are supplied.
  * @param amount - Amount of tokens to be supplied. Bignumber
  * @param enableAsCollateral - If true supplied amount will be used as collateral.
@@ -17,9 +17,9 @@ import { testForCTokenErrorAndSend } from "../utils/testForCTokenErrorAndSend";
  */
 export async function supplyCToken(
     fuse: Fuse,
-    tokenAddress: string,
     provider: Web3Provider | JsonRpcProvider,
     userAddress: string,
+    tokenAddress: string,
     marketAddress: string,
     amount: BigNumber,
     enableAsCollateral: boolean,

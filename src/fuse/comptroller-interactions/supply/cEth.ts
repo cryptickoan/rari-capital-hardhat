@@ -17,7 +17,6 @@ import { collateral } from "../collateral/collateral";
  */
 export async function supplyCEther(
     fuse: Fuse,
-    // tokenAddress: string,
     provider: Web3Provider | JsonRpcProvider,
     userAddress: string,
     marketAddress: string,
