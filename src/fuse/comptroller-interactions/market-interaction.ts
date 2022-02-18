@@ -4,16 +4,18 @@ import { JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { Interface, parseEther, parseUnits  } from "ethers/lib/utils";
 
 // Fuse SDK
-import { testForCTokenErrorAndSend } from "../utils/testForCTokenErrorAndSend";
+import { testForCTokenErrorAndSend } from "./utils/testForCTokenErrorAndSend";
 
 /**
+ * @param action - Type of action to perform. i.e borrow, withdraw, repay.
  * @param cTokenAddress - Address of market to withdraw from.
  * @param amount - The amount to withdraw.
  * @param provider - An initiated ethers provider.
  * @param tokenAddress - Address of the market's underlying asset.
  * @param decimals - Underlying token's decimals. i.e DAI = 18.
  */
-export async function withdraw(
+export async function marketInteraction(
+    action: actionType,
     cTokenAddress: string,
     amount: string,
     provider: Web3Provider | JsonRpcProvider,
@@ -22,7 +24,8 @@ export async function withdraw(
 ) {
     // 1. Initiate market/ctoken contract.
     const cTokenInterface = new Interface([
-        'function redeemUnderlying(uint redeemAmount) external returns (uint)'
+        'function redeemUnderlying(uint redeemAmount) external returns (uint)',
+        'function borrow(uint borrowAmount) returns (uint)'
     ])
 
     const cTokenContract = new Contract(
@@ -43,15 +46,28 @@ export async function withdraw(
         ? parseEther(amount) 
         : parseUnits(amount, decimals)
     
-    let tx = await testForCTokenErrorAndSend(
-        cTokenContract.callStatic.redeemUnderlying,
-        parsedAmount,
-        cTokenContract.redeemUnderlying,
-        "Cannot withdraw this amount right now!"
-      );
-
-    await tx.wait(1)
+    switch (action) {
+        case 'withdraw':
+            await testForCTokenErrorAndSend(
+                cTokenContract.callStatic.redeemUnderlying,
+                parsedAmount,
+                cTokenContract.redeemUnderlying,
+                "Cannot withdraw this amount right now!"
+              );
+            break;
+        case 'borrow':
+            await testForCTokenErrorAndSend(
+                cTokenContract.callStatic.borrow,
+                parsedAmount,
+                cTokenContract.borrow,
+                "Cannot borrow this amount right now!"
+              );
+        default:
+            break;
+    }
 }
+
+type actionType = "withdraw" | "borrow"
 
 function getDecimals(
     tokenAddress: string,
