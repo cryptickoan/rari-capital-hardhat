@@ -1,6 +1,7 @@
 import '@nomiclabs/hardhat-ethers';
 import { BigNumber } from 'ethers';
 import { task } from 'hardhat/config';
+import { supplyCEther } from '../fuse/comptroller-interactions/supply/cEth';
 
 // Fuse SDK
 import { supplyCToken } from '../fuse/comptroller-interactions/supply/cToken';
@@ -30,4 +31,25 @@ task('supply-ctoken', 'Will return given pool\'s info', async (taskArgs, hre) =>
             comptrollerAddress
         )
     }
+)
+
+task('supply-cether', 'Will return given pool\'s info', async (taskArgs, hre) => {
+    const {address, fuse, fuseDeployed} = await configureEnv(hre)
+    if (!fuseDeployed) return
+
+    const userAddress = address
+    const marketAddress = "0xdeF5E280FCE2381ff5091Aeb13Bf7E44ca3c4Ad1"
+    const amount = BigNumber.from(1000)
+    const comptrollerAddress = "0x42053c258b5cd0b7f575e180DE4B90763cC2358b"
+
+    await supplyCEther(
+        fuse,
+        fuse.provider,
+        userAddress,
+        marketAddress,
+        amount,
+        true,
+        comptrollerAddress
+    )
+}
 )
