@@ -2,6 +2,9 @@
 
 This project eases the process of setting up a hardhat localfork with Rari Capital's products.
 
+<details>
+<summary> Setup </summary>
+
 1. You first run 
 
 		npm install 
@@ -33,31 +36,60 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
 		npx hardhat deploy-fuse --network localhost 
         
       This will deploy a clean instance of fuse in your localnode.
+</details>
       
-      
-### Available scripts:  
+<details>
+<summary>Fuse</summary>
+<ul>
+<details>     
+<summary> Interacion </summary>
+<ul>
 
-##### make sure to run step 5 before using tasks below.
+###### Go through the setup before using tasks below.
 
-- To deploy an empty pool:
+
+<details>
+    <summary>Deploy an empty pool</summary>
 
 		npx hardhat deploy-pool --network localhost
 		
-These task will output the deployed pool's comptroller address which you will need to run the tasks below:
+###### This task will output the deployed pool's comptroller address which you will need to run the tasks below:
+</details>
 
-- To deploy a cToken/market:
+
+<details>
+    <summary>Deploy a cToken/market</summary>
 
 		npx hardhat deploy-market --comptroller ${pool's comptroller address} --underlying ${underlying token address} --network localhost --cfactor ${collateral factor. If 50% user will only be able to borrow 50% of their collateral value} --rfactor ${reserve factor. Percentage that will go to reserves.} --adminfee ${Percentage admin fee.}
-    ###### last 3 args are optional and should be a number between 0 and 1.
-        
-- To deploy a rewards distributor
+		
+###### last 3 args are optional and should be a number between 0 and 1.
+</details>
+
+      
+<details>  
+    <summary>Deploy a rewards distributor to a given pool</summary>
 
 		npx hardhat deploy-rd-to-pool --underlying ${address of token to be distributed} --comptroller ${pool's comptroller address}  --network localhost
+</details>
+</ul>
+</details> 
 
-- To get the pool's information:
+<details>
+    <summary>Fetching info</summary>
+<ul>
+
+###### Go through the setup, and deploy a pool before using tasks below.
+<details>
+    <summary>To get the pool's information</summary>
 
         npx hardhat get-pool-info --comptroller ${pool's comptroller address} --network localhost
-        
+</details>
+</ul>
+</details>
+</ul>
+</details>
+    
+   
 
 <!-- 
 # Performance optimizations
