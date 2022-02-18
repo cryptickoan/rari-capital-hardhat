@@ -55,7 +55,7 @@ task('setup', 'Sets up the environment expected for dApp tests', async (taskArgs
                     poolAddress, 
                     address,
                     "0x6b175474e89094c44da98b954eedeac495271d0f",
-                    0.5,
+                    5,
                     0.1,
                     0.05
             );
@@ -65,6 +65,24 @@ task('setup', 'Sets up the environment expected for dApp tests', async (taskArgs
                 console.log(colors.red("Please reset node and start again."))
                 return
         }
+
+        try {
+                console.log(colors.yellow("Deploying ETH market to configuredPool"))
+                await deployMarket(
+                        fuse,
+                        poolAddress, 
+                        address,
+                        "0",
+                        5,
+                        0.1,
+                        0.05
+                );
+                console.log(colors.green("Deployment successful!"))
+            } catch (e) {
+                    console.error(e)
+                    console.log(colors.red("Please reset node and start again."))
+                    return
+            }
 
         console.log(colors.green("Test environment configured successfully!"))
 
