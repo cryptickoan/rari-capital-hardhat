@@ -20,7 +20,7 @@ export async function supplyCEther(
     provider: Web3Provider | JsonRpcProvider,
     userAddress: string,
     marketAddress: string,
-    amount: BigNumber,
+    amount: string,
     enableAsCollateral: boolean,
     comptrollerAddress: string
 ) {
@@ -45,16 +45,20 @@ export async function supplyCEther(
         )
     }
 
-    const balance = await provider.getBalance(userAddress)
+    // 3. Parse given amount
+    const parsedAmount = parseEther(amount)
 
-    if (balance.eq(amount)) {
+    
+    // 4. Mint
+    const balance = await provider.getBalance(userAddress)
+    if (balance.eq(parsedAmount)) {
         // If user is supplying all its balance, we need to leave enough
         // available for gas.
 
         //  1. Estimate gas for call.
         const { gasWEI } = await fetchGasForCall(
             cToken.estimateGas.mint,
-            amount,
+            parsedAmount,
             fuse,
             userAddress
           );
@@ -63,7 +67,7 @@ export async function supplyCEther(
             if (!gasWEI) return
 
         // 2. From amount to supply substract estimated gas.
-        const amountUpdated = amount.sub(gasWEI)
+        const amountUpdated = parsedAmount.sub(gasWEI)
 
         // 3. Mint
             // Gas price is best handled by the wallet. 
