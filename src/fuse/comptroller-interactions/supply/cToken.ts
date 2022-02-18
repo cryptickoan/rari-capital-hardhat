@@ -1,6 +1,9 @@
+// Ethers
 import { JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
-import { BigNumber, Contract, utils, constants } from "ethers";
-import { formatEther, formatUnits, Interface, parseEther, parseUnits } from "ethers/lib/utils";
+import { BigNumber, Contract, constants } from "ethers";
+import { Interface, parseEther, parseUnits  } from "ethers/lib/utils";
+
+// Fuse SDK
 import { Fuse } from "../../../../cjs";
 import { collateral } from "../collateral/collateral";
 import { testForCTokenErrorAndSend } from "../utils/testForCTokenErrorAndSend";
@@ -39,7 +42,7 @@ export async function supplyCToken(
     )
     
     // 2. Initiate erc20 contract for underlying asset/token.
-    const erc20Interface = new utils.Interface([
+    const erc20Interface = new Interface([
         'function allowance(address owner, address spender) public view returns (uint256 remaining)',
         'function approve(address spender, uint256 value) public returns (bool success)',
         'function balanceOf(address _owner) public view returns (uint256 balance)',
@@ -80,7 +83,6 @@ export async function supplyCToken(
             provider
         )
     }
-
 
     //  6. Test for errors. Send transaction if there are none.
     await testForCTokenErrorAndSend(

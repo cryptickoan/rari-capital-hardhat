@@ -4,6 +4,7 @@ import { task } from 'hardhat/config';
 // Fuse SDK
 import { supplyCEther } from '../fuse/comptroller-interactions/supply/cEth';
 import { supplyCToken } from '../fuse/comptroller-interactions/supply/cToken';
+import { withdraw } from '../fuse/comptroller-interactions/withdraw/withdraw';
 
 // Hardhat helpers
 import { configureEnv } from '../utils';
@@ -45,3 +46,19 @@ task('supply', 'Will supply amount of token to market.')
         }
     }
 )
+
+task('withdraw', 'Withdraws amount from market')
+    .addParam('market', 'Address of market to withdraw from.')
+    .addParam('amount', 'Amount to withdraw from given market.')
+    .addParam('token', 'Address of token to withdraw. 0 if its Eth')
+    .setAction(async (taskArgs, hre) => {
+    const {fuse, fuseDeployed} = await configureEnv(hre)
+    if (!fuseDeployed) return
+
+    await withdraw(
+        taskArgs.market,
+        taskArgs.amount,
+        fuse.provider,
+        taskArgs.token,
+    )
+})
