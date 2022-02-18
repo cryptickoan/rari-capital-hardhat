@@ -4,6 +4,7 @@ import { Fuse } from "../../../../cjs";
 import { fetchGasForCall } from "../utils/fetchGasForCall";
 import { Interface, parseEther, formatEther} from "ethers/lib/utils";
 import { constants } from "ethers";
+import { collateral } from "../collateral/collateral";
 
 /**
  * @param fuse - An initiated fuse sdk instance.
@@ -24,47 +25,34 @@ export async function supplyCEther(
     enableAsCollateral: boolean,
     comptrollerAddress: string
 ) {
+    // 1. Initiate contract
     const cTokenInterface = new Interface([
-         'function mint() public returns ()'
+         'function mint() payable'
     ])
 
-    // const cToken = new Contract(
-    //     marketAddress,
-    //     cTokenInterface,
-    //     fuse.provider.getSigner()
-    // )
-
     const cToken = new Contract(
-            marketAddress,
-            JSON.parse(
-                fuse.compoundContracts[
-                "contracts/CEtherDelegate.sol:CEtherDelegate"
-                ].abi
-            ),
-            fuse.provider.getSigner()
-        );
+        marketAddress,
+        cTokenInterface,
+        fuse.provider.getSigner()
+    )
 
+    // 2. Enable as collateral if requested.
+    if (enableAsCollateral) {
+        await collateral(
+            comptrollerAddress,
+            [marketAddress],
+            "enter",
+            provider
+        )
+    }
 
     const balance = await provider.getBalance(userAddress)
 
-    // 3. Enable as collateral if requested.
-    if (enableAsCollateral) {
-
-        const comptrollerInterface = new Interface([
-            'function enterMarkets(address[] calldata cTokens) external returns (uint[] memory)',
-        ])
-
-        const comptrollerContract = new Contract(
-            comptrollerAddress,
-            comptrollerInterface,
-            provider.getSigner(userAddress)
-        )
-
-        // Don't await this, we don't care if it gets executed first!
-        await comptrollerContract.enterMarkets([cToken.address]);
-    }
-
     if (balance.eq(amount)) {
+        // If user is supplying all its balance, we need to leave enough
+        // available for gas.
+
+        //  1. Estimate gas for call.
         const { gasWEI } = await fetchGasForCall(
             cToken.estimateGas.mint,
             amount,
@@ -72,21 +60,22 @@ export async function supplyCEther(
             userAddress
           );
 
-        // If there's an error fetching gas price return
-        if (!gasWEI) return
+            // If there's an error fetching gas price return
+            if (!gasWEI) return
 
-        console.log(amount.sub(gasWEI))
+        // 2. From amount to supply substract estimated gas.
         const amountUpdated = amount.sub(gasWEI)
-        // Mint max amount, after substracting fees
-        // Gas price is best handled by the wallet. 
-        // On our side we just make sure to leave enough balance to pay for fees.
+
+        // 3. Mint
+            // Gas price is best handled by the wallet. 
+            // On our side we just make sure to leave enough balance to pay for fees.
         await cToken.mint({
             from: userAddress,
             value: amountUpdated
         });
 
     } else {
-        const tx = await cToken.mint({ 
+        await cToken.mint({ 
             from: userAddress,
             value: amount
         });
