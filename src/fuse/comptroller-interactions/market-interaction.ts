@@ -1,5 +1,5 @@
 // Ethers
-import { Contract } from "ethers";
+import { Contract, BigNumber } from "ethers";
 import { JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { Interface, parseEther, parseUnits  } from "ethers/lib/utils";
 
@@ -22,10 +22,13 @@ export async function marketInteraction(
     tokenAddress: string,
     decimals?: number
 ) {
+
     // 1. Initiate market/ctoken contract.
     const cTokenInterface = new Interface([
         'function redeemUnderlying(uint redeemAmount) external returns (uint)',
-        'function borrow(uint borrowAmount) returns (uint)'
+        'function borrow(uint borrowAmount) returns (uint)',
+        'function repayBorrow(uint repayAmount) returns (uint)',
+        'function repayBorrow() payable'
     ])
 
     const cTokenContract = new Contract(
@@ -33,7 +36,7 @@ export async function marketInteraction(
         cTokenInterface,
         provider.getSigner()
     )
-
+    
     // 2. Parse given amount to the underlying asset's notation.
         // Fetch decimals if not given.
         if(!decimals && tokenAddress != '0'){
@@ -62,12 +65,25 @@ export async function marketInteraction(
                 cTokenContract.borrow,
                 "Cannot borrow this amount right now!"
               );
+        case 'repay':
+            if (tokenAddress !== '0') {   
+                await testForCTokenErrorAndSend(
+                    cTokenContract.callStatic['repayBorrow(uint repayAmount)'],
+                    parsedAmount,
+                    cTokenContract['repayBorrow(uint repayAmount)'],
+                    "Cannot repay this amount right now!"
+                );
+            } else {
+                await cTokenContract['repayBorrow()']({
+                    value: parsedAmount,
+                });
+            }
         default:
             break;
     }
 }
 
-type actionType = "withdraw" | "borrow"
+type actionType = "withdraw" | "borrow" | "repay" | "supply"
 
 function getDecimals(
     tokenAddress: string,
