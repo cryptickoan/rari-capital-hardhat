@@ -2,6 +2,7 @@ import { JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { BigNumber, Contract, utils, constants } from "ethers";
 import { Interface } from "ethers/lib/utils";
 import { Fuse } from "../../../../cjs";
+import { collateral } from "../collateral/collateral";
 import { testForCTokenErrorAndSend } from "../utils/testForCTokenErrorAndSend";
 
 /**
@@ -24,28 +25,18 @@ export async function supplyCToken(
     enableAsCollateral: boolean,
     comptrollerAddress: string
 ) {
+    // 1. Initiate cToken/market contract.
     const cTokenInterface = new Interface([
         'function mint(uint256 mintAmount) public returns (uint256)'
     ])
-
-    // Might need contract for supply/withdrawy/repay abis will save here in the meantime
-        // const cToken = new Contract(
-        //     marketAddress,
-        //     JSON.parse(
-        //         fuse.compoundContracts[
-        //         "contracts/CErc20Delegate.sol:CErc20Delegate"
-        //         ].abi
-        //     ),
-        //     fuse.provider.getSigner()
-        // );
 
     const cToken = new Contract(
         marketAddress,
         cTokenInterface,
         fuse.provider.getSigner()
     )
-
-    // 1. Create erc20 contract.
+    
+    // 2. Initiate erc20 contract for underlying asset/token.
     const erc20Interface = new utils.Interface([
         'function allowance(address owner, address spender) public view returns (uint256 remaining)',
         'function approve(address spender, uint256 value) public returns (bool success)'
@@ -71,29 +62,20 @@ export async function supplyCToken(
 
     // 3. Enable as collateral if requested.
     if (enableAsCollateral) {
-
-        const comptrollerInterface = new Interface([
-            'function enterMarkets(address[] calldata cTokens) external returns (uint[] memory)',
-        ])
-
-        const comptrollerContract = new Contract(
+        await collateral(
             comptrollerAddress,
-            comptrollerInterface,
-            provider.getSigner(userAddress)
+            [marketAddress],
+            "enter",
+            provider
         )
-
-        // Don't await this, we don't care if it gets executed first!
-        await comptrollerContract.enterMarkets([cToken.address]);
     }
 
 
-    //  4. Test for errors. Send transaction if thers none.
-    let tx = await testForCTokenErrorAndSend(
+    //  4. Test for errors. Send transaction if there are none.
+    await testForCTokenErrorAndSend(
         cToken.callStatic.mint,
         amount,
         cToken.mint,
         "Cannot deposit this amount right now!"
       );
-
-      console.log(tx, 'Woohoo!')
 }
