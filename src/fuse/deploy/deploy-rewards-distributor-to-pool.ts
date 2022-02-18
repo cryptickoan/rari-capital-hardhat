@@ -6,7 +6,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import colors from 'colors';
 
 // Function
-import { addRdToPool } from '../comptroller-interactions/add-rd';
+import { addRdToPool } from '../market-interactions/add-rd';
 
 /**
  * @param fuse - An initiated fuse sdk instance.
