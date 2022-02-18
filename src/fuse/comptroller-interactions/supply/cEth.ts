@@ -80,7 +80,7 @@ export async function supplyCEther(
     } else {
         await cToken.mint({ 
             from: userAddress,
-            value: amount
+            value: parsedAmount
         });
     }
 }
