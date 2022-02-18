@@ -9,47 +9,40 @@ import { supplyCToken } from '../fuse/comptroller-interactions/supply/cToken';
 // Hardhat helpers
 import { configureEnv } from '../utils';
 
-task('supply-ctoken', 'Will return given pool\'s info', async (taskArgs, hre) => {
+task('supply', 'Will supply amount of token to market.')
+    .addParam('underlying', 'Address for the underlying token of the market to supply to. 0 if its ether.')
+    .addParam('market', 'Address of the market/ctoken to supply to.')
+    .addParam('comptroller', 'Address of comptroller where the market is listed on.')
+    .addParam('amunt', 'Amount of underlying to supply.')
+    .addOptionalParam('enableAsCollateral', 'If true, the supplied amount will be enabled as collateral.')
+    .addOptionalParam('user', 'Address of user that is supplying. Must be a hardhat address.')
+    .setAction( async (taskArgs, hre) => {
         const {address, fuse, fuseDeployed} = await configureEnv(hre)
         if (!fuseDeployed) return
 
-        const tokenAddress = "0x6b175474e89094c44da98b954eedeac495271d0f"
-        const userAddress = address
-        const marketAddress = "0xB8DA336A58a13D9F09FaA41570cAAf5Ec4879266"
-        const amount = BigNumber.from(10000)
-        const enableAsCollateral = true
-        const comptrollerAddress = "0x42053c258b5cd0b7f575e180DE4B90763cC2358b"
+        const userAddress = taskArgs.address ?? address
 
-        await supplyCToken(
-            fuse,
-            tokenAddress,
-            fuse.provider,
-            userAddress,
-            marketAddress,
-            amount,
-            enableAsCollateral,
-            comptrollerAddress
-        )
+        if (taskArgs.underlying !== 0 ){
+            await supplyCToken(
+                fuse,
+                fuse.provider,
+                userAddress,
+                taskArgs.tokenAddress,
+                taskArgs.marketAddress,
+                taskArgs.amount,
+                taskArgs.enableAsCollateral,
+                taskArgs.comptrollerAddress
+            )
+        } else {
+            await supplyCEther(
+                fuse,
+                fuse.provider,
+                userAddress,
+                taskArgs.marketAddress,
+                taskArgs.amount,
+                taskArgs.enableAsCollateral,
+                taskArgs.comptrollerAddress
+            )
+        }
     }
-)
-
-task('supply-cether', 'Will return given pool\'s info', async (taskArgs, hre) => {
-    const {address, fuse, fuseDeployed} = await configureEnv(hre)
-    if (!fuseDeployed) return
-
-    const userAddress = address
-    const marketAddress = "0xdeF5E280FCE2381ff5091Aeb13Bf7E44ca3c4Ad1"
-    const amount = BigNumber.from(1000)
-    const comptrollerAddress = "0x42053c258b5cd0b7f575e180DE4B90763cC2358b"
-
-    await supplyCEther(
-        fuse,
-        fuse.provider,
-        userAddress,
-        marketAddress,
-        amount,
-        true,
-        comptrollerAddress
-    )
-}
 )
