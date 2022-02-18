@@ -71,7 +71,7 @@ task('deploy-market', 'Deploys an asset to the given comptroller.')
                         taskArgs.comptroller, 
                         address,
                         taskArgs.underlying,
-                        taskArgs.cfactor ?? 0.5,
+                        taskArgs.cfactor ?? 5,
                         taskArgs.rfactor ?? 0.1,
                         taskArgs.adminFee ?? 0.05
                 );
