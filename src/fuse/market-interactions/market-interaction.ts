@@ -15,12 +15,12 @@ import { testForCTokenErrorAndSend } from "./utils/testForCTokenErrorAndSend";
  * @param decimals - Underlying token's decimals. i.e DAI = 18.
  */
 export async function marketInteraction(
-    action: actionType,
+    action: marketInteractionType,
     cTokenAddress: string,
     amount: string,
     provider: Web3Provider | JsonRpcProvider,
     tokenAddress: string,
-    decimals?: number
+    decimals?: number,
 ) {
 
     // 1. Initiate market/ctoken contract.
@@ -28,7 +28,9 @@ export async function marketInteraction(
         'function redeemUnderlying(uint redeemAmount) external returns (uint)',
         'function borrow(uint borrowAmount) returns (uint)',
         'function repayBorrow(uint repayAmount) returns (uint)',
-        'function repayBorrow() payable'
+        'function repayBorrow() payable',
+        'function mint() payable',
+        'function mint(uint256 mintAmount) public returns (uint256)'
     ])
 
     const cTokenContract = new Contract(
@@ -78,12 +80,25 @@ export async function marketInteraction(
                     value: parsedAmount,
                 });
             }
+        case 'supply':
+            if (tokenAddress !== '0') {
+                await testForCTokenErrorAndSend(
+                    cTokenContract.callStatic['mint(uint256 mintAmount)'],
+                    parsedAmount,
+                    cTokenContract['mint(uint256 mintAmount)'],
+                    "Cannot deposit this amount right now!"
+                ); 
+            } else {
+                await cTokenContract['mint()']({ 
+                    value: parsedAmount
+                });
+            }
         default:
             break;
     }
 }
 
-type actionType = "withdraw" | "borrow" | "repay" | "supply"
+type marketInteractionType = "withdraw" | "borrow" | "repay" | "supply"
 
 function getDecimals(
     tokenAddress: string,
