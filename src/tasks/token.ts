@@ -31,7 +31,7 @@ const getTokenInfo = (token: string) => {
     )
   }
   
-  task("getToken")
+  task("sendToken")
     .addParam("to", "Transfer recipient")
     .addParam("amount", "Amount of tokens to be transfered in regular numbers")
     .addParam("token", "Symbol of the token to be transfered in caps. i.e. DAI, USDC")
