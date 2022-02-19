@@ -49,6 +49,7 @@
     "@uniswap/v3-core": "^1.0.0",
     "@uniswap/v3-periphery": "github:Uniswap/uniswap-v3-periphery#pull/96/head",
     "axios": "^0.25.0",
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "erc-20-abi": "^1.0.0"
   }
 }

@@ -473,7 +473,7 @@ class Fuse {
                 const comptroller = new ethers_1.Contract(conf.comptroller, JSON.parse(this.compoundContracts["contracts/Comptroller.sol:Comptroller"].abi), this.provider.getSigner());
                 try {
                     const errorCode = yield comptroller.callStatic._deployMarket(true, constructorData, collateralFactor);
-                    if (errorCode != ethers_1.constants.Zero)
+                    if (errorCode != 0)
                         throw ("Failed to deploy market with error code: " +
                             Fuse.COMPTROLLER_ERROR_CODES[errorCode]);
                 }

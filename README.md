@@ -2,6 +2,9 @@
 
 This project eases the process of setting up a hardhat localfork with Rari Capital's products.
 
+<details>
+<summary> Setup </summary>
+
 1. You first run 
 
 		npm install 
@@ -33,31 +36,150 @@ This project eases the process of setting up a hardhat localfork with Rari Capit
 		npx hardhat deploy-fuse --network localhost 
         
       This will deploy a clean instance of fuse in your localnode.
+</details>
       
-      
-### Available scripts:  
+<details>
+<summary>Fuse</summary>
+<ul>
+<details>     
+<summary> Interacion </summary>
+<ul>
 
-##### make sure to run step 5 before using tasks below.
+###### Go through the setup before using any task below.
 
-- To deploy an empty pool:
+
+<details>
+    <summary>Deploy an empty pool</summary>
 
 		npx hardhat deploy-pool --network localhost
 		
-These task will output the deployed pool's comptroller address which you will need to run the tasks below:
+###### This task will output the deployed pool's comptroller address which you will need to run the tasks below:
+</details>
 
-- To deploy a cToken/market:
 
-		npx hardhat deploy-market --comptroller ${pool's comptroller address} --underlying ${underlying token address} --network localhost --cfactor ${collateral factor. If 50% user will only be able to borrow 50% of their collateral value} --rfactor ${reserve factor. Percentage that will go to reserves.} --adminfee ${Percentage admin fee.}
-    ###### last 3 args are optional and should be a number between 0 and 1.
+<details>
+    <summary>Deploy a cToken/market</summary>
+
+		npx hardhat deploy-market --comptroller 0x00...0000 --underlying 0x00...0000 --cfactor 5 --rfactor 0.5 --adminfee 0.05 --network localhost 
+	
+###### - comptroller is the comptroller address where ctoken/market will be listed.
+###### - underlying is the underlying token of the market.
+###### - cfactor is the collateral factor of the market. optional
+###### - rfactor is the reserve factor. optional.
+###### - adminfee is the admin fee. optional.
+</details>
+
+      
+<details>  
+    <summary>Deploy a rewards distributor to a given pool</summary>
+
+	npx hardhat deploy-rd-to-pool --underlying 0x00...0000 --comptroller 0x00...0000 --network localhost
+		
+###### - underlying is the address of token to distribute.
+###### - comptroller is the comptroller address to add rd.
+</details>
+
+<details>
+<summary>Deploy Uniswap V2 Twap Oracle</summary>
+    
+    npx hardhat deploy-unitwap-v2
+
+###### task not complete yet, it'll deploy an oracle but will not add it to the comptroller.
+
+</details>
+
+
+<details>
+<summary>Market Interaction</summary>
+<ul>
+
+<details>
+<summary>Supply</summary>
         
-- To deploy a rewards distributor
-
-		npx hardhat deploy-rd-to-pool --underlying ${address of token to be distributed} --comptroller ${pool's comptroller address}  --network localhost
-
-- To get the pool's information:
-
-        npx hardhat get-pool-info --comptroller ${pool's comptroller address} --network localhost
         
+    npx hardhat supply --underlying 0x00...0000 --market 0x00...0000 --comptroller 0x00...0000 --amount 1000 --collateralize true --user 0x00...0000
+    
+
+###### - underlying is the market's underlying asset.
+###### - market is the address of the market.
+###### - comptroller is the address where market is listed.
+###### - amount is the amount of tokens to supply.
+###### - collateralize is optional. If true you will enter the market.
+###### - user is address of supplier. optional. default to hardhat's first address.
+</details>
+<details>
+<summary>Borrow</summary>
+        
+        
+    npx hardhat borrow --market 0x00...0000 --amount 1000 --token 0x00..0000
+    
+
+###### - market is the address of the market.
+###### - amount is the amount of tokens to supply.
+###### - token is the market's underlying asset.
+</details>
+<details>
+<summary>Repay</summary>
+        
+        
+    npx hardhat repay --market 0x00...0000 --amount 1000 --token 0x00..0000
+    
+
+###### - market is the address of the market.
+###### - amount is the amount of tokens to supply.
+###### - token is the market's underlying asset.
+</details>
+<details>
+<summary>Withdraw</summary>
+        
+        
+    npx hardhat withdraw --market 0x00...0000 --amount 1000 --token 0x00..0000
+    
+
+###### - market is the address of the market.
+###### - amount is the amount of tokens to supply.
+###### - token is the market's underlying asset.
+</details>
+
+</ul>
+</details>
+</ul>
+</details> 
+
+<details>
+    <summary>Fetching info</summary>
+<ul>
+
+###### Go through the setup, and deploy a pool before using tasks below.
+<details>
+    <summary>To get the pool's information</summary>
+
+    npx hardhat get-pool-info --comptroller 0x00...0000 --network localhost
+      
+###### - comptroller is the address of the comptroller that will be used to get information.
+</details>
+</ul>
+</details>
+</ul>
+</details>
+
+<details>
+<summary>Misc</summary>
+<ul>
+<details>
+<summary>Get a token</summary>
+
+    npx hardhat sendToken --to 0x00...0000 --amount 1000 --token DAI
+    
+###### - to is the recepient address.
+###### - amount is the amount of tokens to send
+###### - token is the tokens symbol. Currently supports DAI and USDC.
+    
+</details>
+</ul>
+</details>
+    
+   
 
 <!-- 
 # Performance optimizations

@@ -13,6 +13,7 @@ import { deployEmptyPool } from '../fuse/deploy/deploy-empty-pool';
 import { deployMarket } from '../fuse/deploy/deploy-market';
 import { deployRdToPool } from '../fuse/deploy/deploy-rewards-distributor-to-pool';
 import { configureEnv, check } from '../utils';
+import { deployUniTwapV2ToMpo } from '../fuse/deploy/deploy-uni-twap-v2-to-mpo';
 
 
 task('deploy-fuse', 'Deploys a clean fuse instance', async (taskArgs, hre) => {
@@ -70,7 +71,7 @@ task('deploy-market', 'Deploys an asset to the given comptroller.')
                         taskArgs.comptroller, 
                         address,
                         taskArgs.underlying,
-                        taskArgs.cfactor ?? 0.5,
+                        taskArgs.cfactor ?? 5,
                         taskArgs.rfactor ?? 0.1,
                         taskArgs.adminFee ?? 0.05
                 );
@@ -131,4 +132,16 @@ task('deploy-rd-to-pool')
 
         }
 )
+
+task('deploy-unitwap-v2', async(taskArgs, hre) => {
+        const {fuse, address, provider, fuseDeployed} = await configureEnv(hre)
+        if (!fuseDeployed) return
+
+        await deployUniTwapV2ToMpo(
+                "0x42053c258b5cd0b7f575e180DE4B90763cC2358b",
+                "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                fuse,
+                address
+        )
+})
 
