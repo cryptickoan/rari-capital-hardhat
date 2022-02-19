@@ -2,12 +2,12 @@ import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 
 // Fuse SDK
-import { supplyCEther } from '../fuse/market-interactions/supply/cEth';
-import { supplyCToken } from '../fuse/market-interactions/supply/cToken';
 import { marketInteraction } from '../fuse/market-interactions/market-interaction';
+import { collateral } from '../fuse/market-interactions/collateral/collateral';
 
 // Hardhat helpers
 import { configureEnv } from '../utils';
+import { checkAllowanceAndApprove } from '../fuse/market-interactions/utils/checkAllowanceAndApprove';
 
 task('supply', 'Will supply amount of token to market.')
     .addParam('underlying', 'Address for the underlying token of the market to supply to. 0 if its ether.')
@@ -20,30 +20,35 @@ task('supply', 'Will supply amount of token to market.')
         const {address, fuse, fuseDeployed} = await configureEnv(hre)
         if (!fuseDeployed) return
 
-        const userAddress = taskArgs.user ?? address
-
-        if (taskArgs.underlying !== '0'){
-            await supplyCToken(
-                fuse,
-                fuse.provider,
-                userAddress,
+        // 1. On an erc20 check for allowance and approve given market to use funds. 
+        if(taskArgs.underlying !== '0') {
+            await checkAllowanceAndApprove(
+                address,
+                taskArgs.market,
                 taskArgs.underlying,
-                taskArgs.market,
                 taskArgs.amount,
-                taskArgs.collateralize ?? false,
-                taskArgs.comptroller
-            )
-        } else {
-            await supplyCEther(
-                fuse,
-                fuse.provider,
-                userAddress,
-                taskArgs.market,
-                taskArgs.amount,
-                taskArgs.collateralize ?? false,
-                taskArgs.comptroller
+                fuse.provider
             )
         }
+
+        // 2. If true enable as collateral. i.e enter market.
+        if (taskArgs.enableAsCollateral) {
+            await collateral(
+                taskArgs.comptrollerAddress,
+                [taskArgs.marketAddress],
+                "enter",
+                fuse.provider
+            )
+        }
+
+        // 3. Supply to given market.
+        await marketInteraction(
+            "supply",
+            taskArgs.market,
+            taskArgs.amount,
+            fuse.provider,
+            taskArgs.underlying,
+        )
     }
 )
 
