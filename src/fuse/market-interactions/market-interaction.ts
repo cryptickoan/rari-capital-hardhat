@@ -30,7 +30,7 @@ export async function marketInteraction(
         'function repayBorrow(uint repayAmount) returns (uint)',
         'function repayBorrow() payable',
         'function mint() payable',
-        'function mint(uint256 mintAmount) public returns (uint256)'
+        'function mint(uint mintAmount) returns (uint)'
     ])
 
     const cTokenContract = new Contract(
@@ -38,7 +38,7 @@ export async function marketInteraction(
         cTokenInterface,
         provider.getSigner()
     )
-    
+
     // 2. Parse given amount to the underlying asset's notation.
         // Fetch decimals if not given.
         if(!decimals && tokenAddress != '0'){
@@ -62,17 +62,18 @@ export async function marketInteraction(
             break;
         case 'borrow':
             await testForCTokenErrorAndSend(
-                cTokenContract.callStatic.borrow,
+                cTokenContract.callStatic['borrow(uint256)'],
                 parsedAmount,
-                cTokenContract.borrow,
+                cTokenContract['borrow(uint256)'],
                 "Cannot borrow this amount right now!"
               );
+              break
         case 'repay':
             if (tokenAddress !== '0') {   
                 await testForCTokenErrorAndSend(
-                    cTokenContract.callStatic['repayBorrow(uint repayAmount)'],
+                    cTokenContract.callStatic['repayBorrow(uint256)'],
                     parsedAmount,
-                    cTokenContract['repayBorrow(uint repayAmount)'],
+                    cTokenContract['repayBorrow(uint256)'],
                     "Cannot repay this amount right now!"
                 );
             } else {
@@ -80,12 +81,13 @@ export async function marketInteraction(
                     value: parsedAmount,
                 });
             }
+            break
         case 'supply':
             if (tokenAddress !== '0') {
                 await testForCTokenErrorAndSend(
-                    cTokenContract.callStatic['mint(uint256 mintAmount)'],
+                    cTokenContract.callStatic['mint(uint256)'],
                     parsedAmount,
-                    cTokenContract['mint(uint256 mintAmount)'],
+                    cTokenContract['mint(uint256)'],
                     "Cannot deposit this amount right now!"
                 ); 
             } else {
@@ -93,6 +95,7 @@ export async function marketInteraction(
                     value: parsedAmount
                 });
             }
+            break
         default:
             break;
     }
