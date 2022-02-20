@@ -77,8 +77,9 @@ export class FuseDeployment {
         }
     }
 
-    async deploy() {
-         console.info(colors.yellow("Initiating deployment."))
+    async deploy(setup?: boolean) {
+        const stringToShow = setup ? "(1/5) Initiating Fuse deployment." : "Initiating deployment."
+         console.info(colors.yellow(stringToShow))
 
         const directory = await this.deployFuseDirectory();
         const liquidator = await this.deploySafeLiquidator();
@@ -93,7 +94,7 @@ export class FuseDeployment {
             {contract: "Secondary lens: ", address: lens[1]},
         ])
        
-        console.info(colors.green("Fuse deployed successfully."))
+        console.info(colors.green("-- Fuse deployed successfully."))
 
          
     }
