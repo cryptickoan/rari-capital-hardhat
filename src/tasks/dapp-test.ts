@@ -58,8 +58,36 @@ task('setup', 'Sets up the environment expected for dApp tests', async (taskArgs
                     5,
                     0.1,
                     0.05
-            );
-            console.log(colors.green("Deployment successful!"))
+                );
+
+                // 2. Filter events to get cToken address.
+                const comptrollerContract = new hre.ethers.Contract(
+                        poolAddress,
+                        JSON.parse(
+                                fuse.compoundContracts["contracts/Comptroller.sol:Comptroller"].abi
+                        ),
+                        fuse.provider
+                )   
+                
+                let events: any = await comptrollerContract.queryFilter(
+                        comptrollerContract.filters.MarketListed() ,
+                        (await fuse.provider.getBlockNumber()) - 10,
+                        "latest"
+                );
+
+                // Done!
+                console.log(
+                        colors.green(
+                                "Deployed market sucessfully!"
+                        )
+                )
+
+                console.table([
+                        {
+                                market: "DAI", 
+                                address: events.slice(-1)[0].args[0]
+                        },
+                ])
         } catch (e) {
                 console.error(e)
                 console.log(colors.red("Please reset node and start again."))
@@ -77,17 +105,47 @@ task('setup', 'Sets up the environment expected for dApp tests', async (taskArgs
                         0.1,
                         0.05
                 );
-                console.log(colors.green("Deployment successful!"))
+
+                // 2. Filter events to get cToken address.
+                const comptrollerContract = new hre.ethers.Contract(
+                        poolAddress,
+                        JSON.parse(
+                                fuse.compoundContracts["contracts/Comptroller.sol:Comptroller"].abi
+                        ),
+                        fuse.provider
+                )   
+                
+                let events: any = await comptrollerContract.queryFilter(
+                        comptrollerContract.filters.MarketListed() ,
+                        (await fuse.provider.getBlockNumber()) - 10,
+                        "latest"
+                );
+
+                // Done!
+                console.log(
+                        colors.green(
+                                "Deployed market sucessfully!"
+                        )
+                )
+
+                console.table([
+                        {
+                                market: "Eth", 
+                                address: events.slice(-1)[0].args[0]
+                        },
+                ])
             } catch (e) {
                     console.error(e)
                     console.log(colors.red("Please reset node and start again."))
                     return
             }
 
-        console.log(colors.green("Test environment configured successfully!"))
+        console.log(colors.green("Test environment configured successfully! These are your pools:"))
 
         console.table([
-            {contracts: "emptyPool", address: emptyPool},
-            {contracts: "configuredPool", address: poolAddress}
+            {comptroller: "emptyPool", address: emptyPool},
+            {comptroller: "configuredPool", address: poolAddress}
         ])
+
+        
 })

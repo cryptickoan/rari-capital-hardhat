@@ -103,7 +103,7 @@ task('deploy-market', 'Deploys an asset to the given comptroller.')
 
         console.table(
                 {
-                  contract: "cToken delegate", 
+                  contract: "cToken delegate/Market", 
                   address: events.slice(-1)[0].args[0]
                 }
         )
