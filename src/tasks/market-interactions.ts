@@ -2,8 +2,8 @@ import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 
 // Fuse SDK
-import { marketInteraction } from '../fuse/market-interactions/market-interaction';
-import { collateral } from '../fuse/market-interactions/collateral/collateral';
+import { marketInteraction } from '../../@rari-capital/comptroller/market-interaction';
+import { collateral } from '../../@rari-capital/comptroller/collateral';
 
 // Hardhat helpers
 import { configureEnv } from '../utils';
