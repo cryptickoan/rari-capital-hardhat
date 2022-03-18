@@ -2,9 +2,9 @@ import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 import { Contract } from "ethers"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
-import { commify, formatUnits, parseEther } from 'ethers/lib/utils';
-import TurboComptroller from '../../turbo/abi/Comptroller/comptroller.json'
-import CERC20 from '../../turbo/abi/CERC20.sol/CERC20.json'
+import { commify, formatUnits } from 'ethers/lib/utils';
+import TurboComptroller from '../../utils/turbo/abi/Comptroller/comptroller.json'
+import CERC20 from '../../utils/turbo/abi/CERC20.sol/CERC20.json'
 
 task('turbo-markets', "Will create an empty safe", async (taskArgs, hre) => {
 

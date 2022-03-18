@@ -2,7 +2,7 @@ import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 import { Contract } from "ethers"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
-import TurboRouter from '../../turbo/abi/TurboRouter.sol/TurboRouter.json'
+import TurboRouter from '../../utils/turbo/abi/TurboRouter.sol/TurboRouter.json'
 import { parseEther } from 'ethers/lib/utils';
 
 task('create-safe', "Will create an empty safe", async (taskArgs, hre) => {

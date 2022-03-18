@@ -2,15 +2,15 @@ import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 import { Contract } from "ethers"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
-import TurboSafe from '../../turbo/abi/TurboSafe.sol/TurboSafe.json'
-import ERC20 from '../../turbo/abi/ERC20.sol/ERC20.json'
+import TurboSafe from '../../utils/turbo/abi/TurboSafe.sol/TurboSafe.json'
+import ERC20 from '../../utils/turbo/abi/ERC20.sol/ERC20.json'
 import { formatEther, parseEther } from 'ethers/lib/utils';
 
 
 /*///////////////////////////////////////////////////////////////
                         STATIC CALLS
 //////////////////////////////////////////////////////////////*/
-task('getOwner', "Will get the safe's owner", async (taskArgs, hre) => {
+task('get-owner', "Will get the safe's owner", async (taskArgs, hre) => {
 
     const turboSafeContract = await createTurboSafe(hre)
 
@@ -19,7 +19,7 @@ task('getOwner', "Will get the safe's owner", async (taskArgs, hre) => {
     console.log({receipt})
 })
 
-task('getPool', "Gets pool associated to the safe", async (taskArgs, hre) => {
+task('get-pool', "Gets pool associated to the safe", async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre)
 
     const pool = await turboSafeContract.pool()
@@ -28,7 +28,7 @@ task('getPool', "Gets pool associated to the safe", async (taskArgs, hre) => {
 })
 
 
-task('getFeiCToken', "Gets pool associated to the safe", async (taskArgs, hre) => {
+task('get-fei-ctoken', "Gets pool associated to the safe", async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre)
 
     const feiTurboCToken = await turboSafeContract.feiTurboCToken()
@@ -36,7 +36,7 @@ task('getFeiCToken', "Gets pool associated to the safe", async (taskArgs, hre) =
     console.log({feiTurboCToken})
 })
 
-task('getAssetTurboCToken', "Gets pool associated to the safe", async (taskArgs, hre) => {
+task('get-asset-turbo-ctoken', "Gets pool associated to the safe", async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre)
 
     const assetTurboCToken = await turboSafeContract.assetTurboCToken()
@@ -44,7 +44,7 @@ task('getAssetTurboCToken', "Gets pool associated to the safe", async (taskArgs,
     console.log({assetTurboCToken})
 })
 
-task('getSafeAsset', "Gets pool associated to the safe", async (taskArgs, hre) => {
+task('get-safe-asset', "Gets pool associated to the safe", async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre)
 
     const safeAsset = await turboSafeContract.asset()
@@ -52,7 +52,7 @@ task('getSafeAsset', "Gets pool associated to the safe", async (taskArgs, hre) =
     console.log({safeAsset})
 })
 
-task('getTotalAssets', "Gets total assets held by the safe", async (taskArgs, hre) => {
+task('get-total-assets', "Gets total assets held by the safe", async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre)
 
     const safeAssets = await turboSafeContract.totalAssets()
@@ -64,7 +64,7 @@ task('getTotalAssets', "Gets total assets held by the safe", async (taskArgs, hr
 /*///////////////////////////////////////////////////////////////
                         METHOD CALLS
 //////////////////////////////////////////////////////////////*/
-task('approveSafe', "Will approve safe to use user assets", async (taskArgs, hre) => {
+task('approve-safe', "Will approve safe to use user assets", async (taskArgs, hre) => {
     const signers = await hre.ethers.getSigners()
 
     const erc20Contract = new Contract(
@@ -81,7 +81,7 @@ task('approveSafe', "Will approve safe to use user assets", async (taskArgs, hre
     console.log({receipt})
 })
 
-task('directDeposit', "Will deposit directly into the safe", async (taskArgs, hre) => {
+task('direct-deposit', "Will deposit directly into the safe", async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre)
 
     const receipt = await turboSafeContract.deposit(
