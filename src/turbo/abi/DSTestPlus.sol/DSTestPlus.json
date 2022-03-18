@@ -1,0 +1,282 @@
+{
+  "abi": [
+    {
+      "type": "function",
+      "name": "IS_TEST",
+      "inputs": [],
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "failed",
+      "inputs": [],
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "log",
+      "inputs": [
+        {
+          "name": "",
+          "type": "string",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_address",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_bytes",
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_bytes32",
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_int",
+      "inputs": [
+        {
+          "name": "",
+          "type": "int256",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_address",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "address",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_bytes",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "bytes",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_bytes32",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "bytes32",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_decimal_int",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "int256",
+          "indexed": false
+        },
+        {
+          "name": "decimals",
+          "type": "uint256",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_decimal_uint",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "uint256",
+          "indexed": false
+        },
+        {
+          "name": "decimals",
+          "type": "uint256",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_int",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "int256",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_string",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "string",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_named_uint",
+      "inputs": [
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": false
+        },
+        {
+          "name": "val",
+          "type": "uint256",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_string",
+      "inputs": [
+        {
+          "name": "",
+          "type": "string",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "log_uint",
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "logs",
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes",
+          "indexed": false
+        }
+      ],
+      "anonymous": false
+    }
+  ],
+  "bytecode": {
+    "object": "0x60806040526000805460ff19166001908117909155600255348015602257600080fd5b50609e806100316000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c8063ba414fa6146037578063fa7626d414605c575b600080fd5b600054604890610100900460ff1681565b604051901515815260200160405180910390f35b60005460489060ff168156fea2646970667358221220d6808f0cc5214e8c4f9ff3f84b3be2f7100f297ad137c077b5ff26ccb6d7612f64736f6c634300080a0033",
+    "sourceMap": "309:4331:27:-:0;;;1573:26:16;;;-1:-1:-1;;1573:26:16;1595:4;1573:26;;;;;;526:37:27;;309:4331;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployed_bytecode": {
+    "object": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c8063ba414fa6146037578063fa7626d414605c575b600080fd5b600054604890610100900460ff1681565b604051901515815260200160405180910390f35b60005460489060ff168156fea2646970667358221220d6808f0cc5214e8c4f9ff3f84b3be2f7100f297ad137c077b5ff26ccb6d7612f64736f6c634300080a0033",
+    "sourceMap": "309:4331:27:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1605:18:16;;;;;;;;;;;;;;;179:14:64;;172:22;154:41;;142:2;127:18;1605::16;;;;;;;1573:26;;;;;;;;",
+    "linkReferences": {}
+  }
+}

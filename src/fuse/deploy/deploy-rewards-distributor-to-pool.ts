@@ -26,7 +26,7 @@ export async function deployRdToPool(
 ) {
 
     console.info(
-        colors.green(
+        colors.yellow(
             "Initiating rewards distributor deployment."
         )
     )
@@ -50,13 +50,13 @@ export async function deployRdToPool(
     )
 
 
-    // 2. Add to pool
-    await addRdToPool(
-        fuse,
-        hre,
-        deployedDistributor.address,
-        comptrollerAddress,
-        comptrollerAdmin
-    )
+    // // 2. Add to pool
+    // await addRdToPool(
+    //     fuse,
+    //     hre,
+    //     deployedDistributor.address,
+    //     comptrollerAddress,
+    //     comptrollerAdmin
+    // )
 
 }

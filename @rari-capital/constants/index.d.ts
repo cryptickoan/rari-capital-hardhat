@@ -1,0 +1,1 @@
+export declare const EmptyAddress = "0x0000000000000000000000000000000000000000";

@@ -3,6 +3,7 @@ import { task } from 'hardhat/config';
 
 //@ts-ignore
 import abi from 'erc-20-abi';
+import { commify } from 'ethers/lib/utils';
 
 const getTokenInfo = (token: string) => {
     switch (token) {
@@ -17,6 +18,18 @@ const getTokenInfo = (token: string) => {
           address: "0x6b175474e89094c44da98b954eedeac495271d0f", 
           decimals: 18,
           holderToImpersonate: "0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503"
+        }
+      case "D3":
+        return {
+          address: "0xBaaa1F5DbA42C3389bDbc2c9D2dE134F5cD0Dc89",
+          decimals:18,
+          holderToImpersonate: "0xc13fd05bf9aea66d5f00b7ae36d4ed2605ad0803"
+        }
+      case "TRIBE":
+        return {
+          address: "0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B",
+          decimals: 18,
+          holderToImpersonate: "0x3744da57184575064838bbc87a0fc791f5e39ea2"
         }
       default:
         break;
@@ -44,6 +57,8 @@ const getTokenInfo = (token: string) => {
         
         const tokenInfo = getTokenInfo(token)
         
+        
+
         if (!tokenInfo) return
 
         await provider.send(
@@ -52,7 +67,8 @@ const getTokenInfo = (token: string) => {
           );
           
           const daiContract = getContract(tokenInfo.address, tokenInfo.holderToImpersonate, provider, hre)
-          
+          const balanceOfSender = await daiContract.balanceOf(tokenInfo.holderToImpersonate)
+          console.log(balanceOfSender)
           console.log('hey')
         const balanceBefore = await daiContract.balanceOf(recipient)
   
@@ -66,11 +82,11 @@ const getTokenInfo = (token: string) => {
         const balanceAfter = await daiContract.balanceOf(recipient)
         
         const clean = (number: any) => {
-          return parseFloat(
+          return commify(
             number.div(
               hre.ethers.constants.WeiPerEther
               ).toString()
-            ).toLocaleString()
+            )
         }
   
         console.log(

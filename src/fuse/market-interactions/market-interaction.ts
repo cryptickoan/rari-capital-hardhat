@@ -103,7 +103,7 @@ export async function marketInteraction(
 
 type marketInteractionType = "withdraw" | "borrow" | "repay" | "supply"
 
-function getDecimals(
+export function getDecimals(
     tokenAddress: string,
     provider: Web3Provider | JsonRpcProvider
 ) {

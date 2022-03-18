@@ -2,8 +2,8 @@ import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 
 // Fuse SDK
-import { marketInteraction } from '../fuse/market-interactions/market-interaction';
-import { collateral } from '../fuse/market-interactions/collateral/collateral';
+import { marketInteraction } from '../../@rari-capital/comptroller/market-interaction';
+import { collateral } from '../../@rari-capital/comptroller/collateral';
 
 // Hardhat helpers
 import { configureEnv } from '../utils';
@@ -51,6 +51,26 @@ task('supply', 'Will supply amount of token to market.')
         )
     }
 )
+
+task('collateral', async (taskArgs, hre) => {
+    const {address, fuse, fuseDeployed} = await configureEnv(hre)
+        if (!fuseDeployed) return
+
+    await collateral(
+        "0x42053c258b5cd0b7f575e180DE4B90763cC2358b",
+        ["0xdeF5E280FCE2381ff5091Aeb13Bf7E44ca3c4Ad1"],
+        "enter",
+        fuse.provider
+    )
+})
+
+task('temporary', async (taskArgs, hre) => {
+    const {address, fuse, fuseDeployed} = await configureEnv(hre)
+        if (!fuseDeployed) return
+
+    console.log(fuse.compoundContracts["contracts/DAIInterestRateModelV2.sol:DAIInterestRateModelV2"]
+    .abi)
+})
 
 task('withdraw', 'Withdraws amount from given market')
     .addParam('market', 'Address of market to withdraw from.')

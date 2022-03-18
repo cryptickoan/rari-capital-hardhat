@@ -1,0 +1,63 @@
+{
+  "abi": [
+    {
+      "type": "function",
+      "name": "deployPool",
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "implementation",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "enforceWhitelist",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "closeFactor",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "liquidationIncentive",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "priceOracle",
+          "type": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "contract Comptroller",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployed_bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  }
+}

@@ -20,6 +20,7 @@ const config: HardhatUserConfig = {
         blockNumber: 14167154
       },
       allowUnlimitedContractSize: true,
+      blockGasLimit: 300_000_000
     },
   },
 };
