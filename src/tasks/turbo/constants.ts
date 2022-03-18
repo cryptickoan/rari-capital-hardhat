@@ -1,0 +1,10 @@
+export const TurboAddresses = {
+    MASTER: "0xab69ee29c41cb9ef1befcc650f858feebbf2cead",
+    ADMIN: "",
+    ROUTER: "0x56e86ef38af5baea7005ba02f80b0c7d1fb13fc1",
+    LENS: "0x2600226b9b372d95deced833fe49ca3a19a4e735",
+    STRATEGY: "0xb6b4798361033d9bb64f5c8f638c4b7c25bab7b6",
+    BOOSTER: "0xc3be0a2078d444a8d19ad59f8378ffb8023e6072",
+    CLERK: "0xc5ac5055fab17a3e0a622d1b8160242eb096bb54",
+    COMPTROLLER: "0x14Bd62D9b534e2301811400F7284945288797588",
+}

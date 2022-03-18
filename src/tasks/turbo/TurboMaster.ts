@@ -16,6 +16,7 @@ import { Contract } from 'ethers';
 import { getPermitDigest, sign } from '../../utils/signatures';
 import { Interface } from 'ethers/lib/utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { TurboAddresses } from './constants';
 
 
 /*///////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ const createTurboMaster = async (hre: HardhatRuntimeEnvironment) => {
     const signers = await hre.ethers.getSigners()
 
     const turboMasterContract = new Contract(
-        '0xab69ee29c41cb9ef1befcc650f858feebbf2cead',
+        TurboAddresses.MASTER,
         TurboMaster.abi,
         signers[0]
     )

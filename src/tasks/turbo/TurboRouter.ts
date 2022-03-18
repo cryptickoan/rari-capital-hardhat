@@ -4,6 +4,7 @@ import { Contract } from "ethers"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 import TurboRouter from '../../utils/turbo/abi/TurboRouter.sol/TurboRouter.json'
 import { parseEther } from 'ethers/lib/utils';
+import { TurboAddresses } from './constants';
 
 task('create-safe', "Will create an empty safe", async (taskArgs, hre) => {
 
@@ -44,7 +45,7 @@ const createTurboRouter = async (hre: HardhatRuntimeEnvironment) => {
     const signers = await hre.ethers.getSigners()
 
     const turboRouterContract = new Contract(
-        '0x56e86ef38af5baea7005ba02f80b0c7d1fb13fc1',
+        TurboAddresses.ROUTER,
         TurboRouter.abi,
         signers[0]
     )

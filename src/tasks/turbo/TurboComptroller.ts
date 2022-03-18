@@ -5,6 +5,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { commify, formatUnits } from 'ethers/lib/utils';
 import TurboComptroller from '../../utils/turbo/abi/Comptroller/comptroller.json'
 import CERC20 from '../../utils/turbo/abi/CERC20.sol/CERC20.json'
+import { TurboAddresses } from './constants';
 
 task('turbo-markets', "Will create an empty safe", async (taskArgs, hre) => {
 
@@ -49,7 +50,7 @@ const createTurboComptroller = async (hre: HardhatRuntimeEnvironment) => {
     const signers = await hre.ethers.getSigners()
 
     const turboRouterContract = new Contract(
-        '0x14Bd62D9b534e2301811400F7284945288797588',
+        TurboAddresses.COMPTROLLER,
         TurboComptroller,
         signers[0]
     )
