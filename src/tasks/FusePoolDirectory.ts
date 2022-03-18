@@ -28,7 +28,7 @@ task('get-pool', 'Sets up the environment expected for dApp tests', async (taskA
     const {address, fuse, fuseDeployed} = await configureEnv(hre)
     if (!fuseDeployed) return
 
-    const id = "1"
+    const id = "0"
 
     const answer = await getPool(fuse.provider, id, fuse.addresses.FUSE_POOL_DIRECTORY_CONTRACT_ADDRESS)
     console.log(answer)
