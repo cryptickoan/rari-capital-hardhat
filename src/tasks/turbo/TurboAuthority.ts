@@ -1,11 +1,6 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
-import { Contract } from "ethers"
-import { HardhatRuntimeEnvironment } from "hardhat/types"
-import TurboAuthority from '../../utils/turbo/abi/Auth.sol/Authority.json'
-import ERC20 from '../../utils/turbo/abi/ERC20.sol/ERC20.json'
-import { commify, formatEther, parseEther } from 'ethers/lib/utils';
-import { TurboAddresses } from './constants';
+import { createTurboAuthority } from './utils/turboContracts';
 
 
 /*///////////////////////////////////////////////////////////////
@@ -28,15 +23,3 @@ task('is-user-authorized', "Returns boolean")
 
     console.log({authorized})
 })
-
-const createTurboAuthority = async (hre: HardhatRuntimeEnvironment, authorityAddress: string) => {
-    const signers = await hre.ethers.getSigners()
-
-    const turboAuthorityContract = new Contract(
-        authorityAddress,
-        TurboAuthority.abi,
-        signers[0]
-    )
-
-    return turboAuthorityContract
-}

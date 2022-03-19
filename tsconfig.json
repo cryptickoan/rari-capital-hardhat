@@ -6,7 +6,9 @@
     "esModuleInterop": true,
     "outDir": "dist",
     "declaration": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "src/",
+    "lib": ["es2019"]
   },
   "include": [
     "./scripts", 

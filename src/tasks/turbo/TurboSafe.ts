@@ -1,12 +1,10 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
 import { Contract } from "ethers"
-import { HardhatRuntimeEnvironment } from "hardhat/types"
-import TurboSafe from '../../utils/turbo/abi/TurboSafe.sol/TurboSafe.json'
-import ERC20 from '../../utils/turbo/abi/ERC20.sol/ERC20.json'
+import ERC20 from './abis/ERC20.sol/ERC20.json'
 import { commify, formatEther, parseEther } from 'ethers/lib/utils';
-import { TurboAddresses } from './constants';
 import { getRecentEventDecoded } from './utils/decodeEvents';
+import { createTurboSafe } from './utils/turboContracts';
 
 
 /*///////////////////////////////////////////////////////////////
@@ -18,9 +16,9 @@ task('get-owner', "Will get the safe's owner")
 
     const turboSafeContract = await createTurboSafe(hre, taskArgs.safe)
 
-    const receipt = await turboSafeContract.owner()
+    const owner = await turboSafeContract.owner()
 
-    console.log({receipt})
+    console.log({owner})
 })
 
 task('get-pool', "Gets pool associated to the safe")
@@ -205,17 +203,3 @@ task('safe-gib', "Impound a specific amount of a Safe's collateral")
     console.log({decodedEvent})
 })
 
-/*///////////////////////////////////////////////////////////////
-                        UTILS
-//////////////////////////////////////////////////////////////*/
-const createTurboSafe = async (hre: HardhatRuntimeEnvironment, turboSafe: string) => {
-    const signers = await hre.ethers.getSigners()
-
-    const turboSafeContract = new Contract(
-        turboSafe,
-        TurboSafe.abi,
-        signers[0]
-    )
-
-    return turboSafeContract
-}

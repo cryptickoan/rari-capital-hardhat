@@ -1,34 +1,20 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
-
-// Colors
-import colors from 'colors';
-
-// Turbo ABIs
-import Deployer from '../../utils/turbo/abi/Deployer.sol/Deployer.json'
-import DAIABI from '../../utils/turbo/abi/DAI.sol/DAI.json'
-import TurboRouter from '../../utils/turbo/abi/TurboRouter.sol/TurboRouter.json'
-import TurboMaster from '../../utils/turbo/abi/TurboMaster.sol/TurboMaster.json'
-import TurboComptroller from '../../utils/turbo/abi/Comptroller.sol/Comptroller.json'
-
-// Ethers
-import { Contract } from 'ethers';
-import { getPermitDigest, sign } from '../../utils/signatures';
-import { Interface } from 'ethers/lib/utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { TurboAddresses } from './constants';
+import { getSafesInfo } from './TurboLens';
+import { TRIBE } from './utils/constants';
+import { createTurboMaster } from './utils/turboContracts';
 
 
 /*///////////////////////////////////////////////////////////////
                         STATIC CALLS
 //////////////////////////////////////////////////////////////*/
 task('get-all-safes', "Will get all available safes", async (taskArgs, hre) => {
-    
-    const turboMasterContract = await createTurboMaster(hre)
+   const allSafes: string[] = await getAllSafes(hre)
 
-    const allSafes = await turboMasterContract.callStatic.getAllSafes()
+   const safesInfo = await getSafesInfo(hre.ethers.provider, allSafes)
 
-    console.log({allSafes})
+   console.log({allSafes, safesInfo})
 })
 
 task('get-safe-id', "Will get the given safe's ID")
@@ -72,20 +58,13 @@ task('get-master-authority', async (taskArgs, hre) => {
 /*///////////////////////////////////////////////////////////////
                         METHOD CALLS
 //////////////////////////////////////////////////////////////*/
-task('direct-create-safe', async (taskArgs, hre) => {
+task('master-create-safe', async (taskArgs, hre) => {
     const turboMasterContract = await createTurboMaster(hre)
-    const receipt = await turboMasterContract.createSafe("0xc7283b66eb1eb5fb86327f08e1b5816b0720212b")
+    const receipt = await turboMasterContract.createSafe(TRIBE)
     console.log({receipt})
 })
 
-const createTurboMaster = async (hre: HardhatRuntimeEnvironment) => {
-    const signers = await hre.ethers.getSigners()
-
-    const turboMasterContract = new Contract(
-        TurboAddresses.MASTER,
-        TurboMaster.abi,
-        signers[0]
-    )
-
-    return turboMasterContract
+export const getAllSafes = async (hre: HardhatRuntimeEnvironment) => {
+    const turboMasterContract = await createTurboMaster(hre)
+    return await turboMasterContract.callStatic.getAllSafes()
 }

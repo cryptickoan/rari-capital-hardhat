@@ -1,11 +1,7 @@
 import '@nomiclabs/hardhat-ethers';
 import { task } from 'hardhat/config';
-import { Contract } from "ethers"
-import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { commify, formatUnits } from 'ethers/lib/utils';
-import TurboComptroller from '../../utils/turbo/abi/Comptroller/comptroller.json'
-import CERC20 from '../../utils/turbo/abi/CERC20.sol/CERC20.json'
-import { TurboAddresses } from './constants';
+import { createTurboComptroller } from './utils/turboContracts';
 
 task('turbo-markets', "Will create an empty safe", async (taskArgs, hre) => {
 
@@ -35,26 +31,3 @@ task('turbo-tribe-supply-cap', "Will get TRIBE's supply cap in the turbo pool", 
 task('turbo-markets-info', "Will get all info for turbo markets", async (taskArgs, hre) => {
 
 })
-
-const createCERC20 = async (hre: HardhatRuntimeEnvironment) => {
-    const signers = await hre.ethers.getSigners()
-
-    const turboTRIBEContract = new Contract(
-        "0x67E6C5c58eDE477bC790e8c050c2eb10fE3a835f",
-        CERC20.abi,
-        signers[0]
-    )
-}
-
-const createTurboComptroller = async (hre: HardhatRuntimeEnvironment) => {
-    const signers = await hre.ethers.getSigners()
-
-    const turboRouterContract = new Contract(
-        TurboAddresses.COMPTROLLER,
-        TurboComptroller,
-        signers[0]
-    )
-
-    return turboRouterContract
-}
-
