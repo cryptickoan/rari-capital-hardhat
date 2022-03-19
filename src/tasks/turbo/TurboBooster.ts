@@ -20,6 +20,15 @@ task('get-boostable-vaults', "Will get all boostable vaults", async (taskArgs, h
     console.log({boostableVaults})
 })
 
+task('get-is-frozen', "Will return true if boosting for all safes under master is frozen.", async (taskArgs, hre) => {
+
+    const turboBoosterContract = await createTurboSafe(hre)
+
+    const boostableVaults = await turboBoosterContract.frozen()
+
+    console.log({boostableVaults})
+})
+
 
 /*///////////////////////////////////////////////////////////////
                         UTILS

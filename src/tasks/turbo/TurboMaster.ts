@@ -22,7 +22,6 @@ import { TurboAddresses } from './constants';
 /*///////////////////////////////////////////////////////////////
                         STATIC CALLS
 //////////////////////////////////////////////////////////////*/
-
 task('get-all-safes', "Will get all available safes", async (taskArgs, hre) => {
     
     const turboMasterContract = await createTurboMaster(hre)
@@ -32,11 +31,13 @@ task('get-all-safes', "Will get all available safes", async (taskArgs, hre) => {
     console.log({allSafes})
 })
 
-task('get-safe-id', "Will get the given safe's ID", async (taskArgs, hre) => {
+task('get-safe-id', "Will get the given safe's ID")
+    .addParam('safe', "TurboSafe to query.")
+    .setAction( async (taskArgs, hre) => {
 
     const turboMasterContract = await createTurboMaster(hre)
 
-    const safeId = await turboMasterContract.callStatic.getSafeId("0x9b1d1ACb9BD6cFcd9159c5FA31F24B9383De1061")
+    const safeId = await turboMasterContract.callStatic.getSafeId(taskArgs.safe)
 
     console.log({safeId})
 })
@@ -56,6 +57,14 @@ task('get-comptroller', async (taskArgs, hre) => {
     console.log(comptroller)
 })
 
+/*///////////////////////////////////////////////////////////////
+                        METHOD CALLS
+//////////////////////////////////////////////////////////////*/
+task('direct-create-safe', async (taskArgs, hre) => {
+    const turboMasterContract = await createTurboMaster(hre)
+    const receipt = await turboMasterContract.createSafe("0xc7283b66eb1eb5fb86327f08e1b5816b0720212b")
+    console.log({receipt})
+})
 
 const createTurboMaster = async (hre: HardhatRuntimeEnvironment) => {
     const signers = await hre.ethers.getSigners()
