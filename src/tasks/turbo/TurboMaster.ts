@@ -57,6 +57,18 @@ task('get-comptroller', async (taskArgs, hre) => {
     console.log(comptroller)
 })
 
+task('get-master-owner', async (taskArgs, hre) => {
+    const turboMasterContract = await createTurboMaster(hre)
+    const owner = await turboMasterContract.owner()
+    console.log({owner})
+})
+
+task('get-master-authority', async (taskArgs, hre) => {
+    const turboMasterContract = await createTurboMaster(hre)
+    const authority = await turboMasterContract.authority()
+    console.log({authority})
+})
+
 /*///////////////////////////////////////////////////////////////
                         METHOD CALLS
 //////////////////////////////////////////////////////////////*/

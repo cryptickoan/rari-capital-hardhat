@@ -6,6 +6,7 @@ import TurboSafe from '../../utils/turbo/abi/TurboSafe.sol/TurboSafe.json'
 import ERC20 from '../../utils/turbo/abi/ERC20.sol/ERC20.json'
 import { commify, formatEther, parseEther } from 'ethers/lib/utils';
 import { TurboAddresses } from './constants';
+import { getRecentEventDecoded } from './utils/decodeEvents';
 
 
 /*///////////////////////////////////////////////////////////////
@@ -117,7 +118,7 @@ task('approve-safe', "Will approve safe to use user assets")
     console.log({receipt})
 })
 
-task('direct-deposit', "Will deposit directly into the safe")
+task('safe-deposit', "Will deposit directly into the safe")
     .addParam('safe', "TurboSafe to query.")
     .setAction(async (taskArgs, hre) => {
     const turboSafeContract = await createTurboSafe(hre, taskArgs.safe)
@@ -130,7 +131,7 @@ task('direct-deposit', "Will deposit directly into the safe")
     console.log({receipt})
 })
 
-task('boost', "Borrow Fei from the Turbo Fuse Pool and deposit it into an authorized Vault.")
+task('safe-boost', "Borrow Fei from the Turbo Fuse Pool and deposit it into an authorized Vault.")
     .addParam('safe', "The safe to use for boosting")
     .addParam('vault', "The vault to deposit borrowed Fei")
     .addParam('amount', "Amount of FEI to borrow")
@@ -143,7 +144,7 @@ task('boost', "Borrow Fei from the Turbo Fuse Pool and deposit it into an author
     console.log({receipt})
 })
 
-task('less', "Withdraw Fei from a deposited Vault and use it to repay debt in the Turbo Fuse Pool.")
+task('safe-less', "Withdraw Fei from a deposited Vault and use it to repay debt in the Turbo Fuse Pool.")
     .addParam('safe', 'The safe to use for lessing')
     .addParam('vault', 'Vault to withdraw from')
     .addParam('amount', 'Amount to withdraw')
@@ -156,7 +157,7 @@ task('less', "Withdraw Fei from a deposited Vault and use it to repay debt in th
     console.log({receipt})
 })
 
-task('slurp', "Accrue any interest earned by the Safe in the Vault.")
+task('safe-slurp', "Accrue any interest earned by the Safe in the Vault.")
     .addParam('safe', "Safe to use for slurping")
     .addParam('vault', "Vault to slurp interest from")
     .setAction(async (taskArgs, hre) => {
@@ -164,28 +165,44 @@ task('slurp', "Accrue any interest earned by the Safe in the Vault.")
     const turboSafeContract = await createTurboSafe(hre, taskArgs.safe) 
     const receipt = await turboSafeContract.slurp(taskArgs.vault)
 
-    console.log({receipt})
+    const blockNumber = await hre.ethers.provider.getBlockNumber()
+    const decodedEVent = await getRecentEventDecoded(turboSafeContract, turboSafeContract.filters.VaultSlurped)
+    console.log({decodedEVent})
 
 })
 
-task('sweep', "Claim tokens sitting idly in the Safe.")
+task('safe-sweep', "Claim tokens sitting idly in the Safe.")
     .addParam('safe', 'Safe to sweep from')
     .addParam('to', 'Receiver of the sweeped tokens')
     .addParam('token', 'Token to sweep and send')
     .addParam('amount', 'Amount to sweep from the safe')
     .setAction(async (taskArgs, hre) => {
-    const blockNumber = await hre.ethers.provider.getBlockNumber()
+        
+    const turboSafeContract = await createTurboSafe(hre, taskArgs.safe)
 
-    const turboSafeContract = await createTurboSafe(hre, taskArgs.safe) 
+    // Safes can borrow any available borrowable asset in the turbo pool + theres shares from the strategy. 
+    // That's why we need to specify token to sweep. 
     const receipt = await turboSafeContract.sweep(taskArgs.to, taskArgs.token, taskArgs.amount)
-
-    const event: any[] = await turboSafeContract.queryFilter(turboSafeContract.filters.TokenSweeped() , blockNumber - 20, blockNumber )
-
-    const decodedEvent = event[0].decode(event[0].data, event[0].topics)
-
-    console.log({decodedEvent})
+    
+    const decodedEvent = await getRecentEventDecoded(turboSafeContract, turboSafeContract.filters.TokenSweeped)
 
     // Looks like you can sweep even if theres no token to sweep. Event will be triggered regardless of anything being transferred.
+    console.log({decodedEvent})
+})
+
+task('safe-gib', "Impound a specific amount of a Safe's collateral")
+    .addParam('safe', 'Safe to impound from')
+    .addParam('to', 'Address to send impounded collateral to')
+    .addParam('amount', 'Amount of collateral to impound')
+    .setAction(async (taskArgs, hre) => {
+    
+    const turboSafeContract = await createTurboSafe(hre, taskArgs.safe)
+
+    // Safes can only support one type of collateral that's why we dont specify token.
+    const receipt = await turboSafeContract.gib(taskArgs.to, parseEther(taskArgs.amount))
+    
+    const decodedEvent = await getRecentEventDecoded(turboSafeContract, turboSafeContract.filters.SafeGibbed)
+    console.log({decodedEvent})
 })
 
 /*///////////////////////////////////////////////////////////////
