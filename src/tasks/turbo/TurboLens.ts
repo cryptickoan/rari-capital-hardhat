@@ -26,19 +26,22 @@ type SafeInfo = {
                         STATIC CALLS
 //////////////////////////////////////////////////////////////*/
 task('get-all-user-safes', "Will get all available safes")
+.addParam('id', 'chainID')
     .addParam('user', 'User to filter for')
     .setAction(async (taskArgs, hre) => {
     
-   const userSafes = await getAllUserSafes(hre, taskArgs.user)
+   const userSafes = await getAllUserSafes(hre, taskArgs.user, taskArgs.id)
 
-   console.log({userSafes})
+//    const safeInfo = await getSafesInfo(hre.ethers.provider, ['0x9b1d1ACb9BD6cFcd9159c5FA31F24B9383De1061'], 31337)
+   console.log(userSafes)
 })
 
 
 task('get-lens-master', "Will get all available safes")
+    .addParam('id', 'chainID')
     .setAction(async (taskArgs, hre) => {
     
-    let lens = await createTurboLens(hre)
+    let lens = await createTurboLens(hre, taskArgs.id)
 
     const master = await lens.master()
 
@@ -46,16 +49,16 @@ task('get-lens-master', "Will get all available safes")
 })
 
 task('get-safe-info', "Will get all available safes")
+    .addParam('id', 'chainID')
     .addParam('safe', 'User to filter for')
     .setAction(async (taskArgs, hre) => {
-    const info = await getSafeInfo(hre, taskArgs.safe)
+    const info = await getSafeInfo(hre, taskArgs.safe, taskArgs.id)
     console.log({info})
 })
 
-
 /** Funcs **/
-export const getSafeInfo = async (hre: HardhatRuntimeEnvironment, safe: string) => {
-    let lens = await createTurboLens(hre)
+export const getSafeInfo = async (hre: HardhatRuntimeEnvironment, safe: string, id: number) => {
+    let lens = await createTurboLens(hre, id)
     try {
         const result: SafeInfo = await lens.callStatic.getSafeInfo(safe)
         return result
@@ -64,16 +67,16 @@ export const getSafeInfo = async (hre: HardhatRuntimeEnvironment, safe: string) 
     }
 }
 
-export const getAllUserSafes = async (hre: HardhatRuntimeEnvironment, user: string) => {
-    const turboLens = await createTurboLens(hre)
+export const getAllUserSafes = async (hre: HardhatRuntimeEnvironment, user: string, id: number) => {
+    const turboLens = await createTurboLens(hre, id)
     return await turboLens.callStatic.getAllUserSafes(user)
 }
 
 
-export const getSafesInfo = async (provider: JsonRpcProvider, safes: string[]) => {
+export const getSafesInfo = async (provider: JsonRpcProvider, safes: string[], id: number) => {
 
     let encodedCalls = safes.map(safe => {
-        return encodeCall(ITurboLens, TurboAddresses.LENS, "getSafeInfo", [safe])
+        return encodeCall(ITurboLens, TurboAddresses[id].LENS, "getSafeInfo", [safe])
     })
 
 

@@ -20,9 +20,10 @@ export const decodeRouterCall = (
 export const callRouterWithMultiCall = async (
     hre: HardhatRuntimeEnvironment,
     encodedCalls: string[],
-    simulatedAddress?: string
+    id: number,
+    simulatedAddress?: string,
   ) => {
-    const router = await createTurboRouter(hre);
+    const router = await createTurboRouter(hre, id);
 
     let options: any = {};
     if (!!simulatedAddress) options.address = simulatedAddress;
@@ -39,9 +40,10 @@ export const callRouterWithMultiCall = async (
   export const sendRouterWithMultiCall = async (
     hre: HardhatRuntimeEnvironment,
     encodedCalls: string[],
+    id: number,
     simulatedAddress?: string
   ) => {
-    const router = await createTurboRouter(hre);
+    const router = await createTurboRouter(hre, id);
 
     let options: any = {};
     if (!!simulatedAddress) options.address = simulatedAddress;

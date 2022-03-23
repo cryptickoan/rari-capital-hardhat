@@ -11,29 +11,35 @@ import { callRouterWithMultiCall, encodeRouterCall, decodeRouterCall, sendRouter
 import { createERC20, createTurboRouter, ITurboRouter } from "./utils/turboContracts"
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
-task("create-safe", "Will create an empty safe", async (taskArgs, hre) => {
-  const turboRouterContract = await createTurboRouter(hre);
+task("create-safe", "Will create an empty safe")
+  .addParam('id', 'chainID')
+  .setAction( async (taskArgs, hre) => {
+  const turboRouterContract = await createTurboRouter(hre, taskArgs.id);
 
   const receipt = await turboRouterContract.createSafe(TRIBE);
 
   console.log({ receipt });
 });
 
-task("approve-router", "Will approve router", async (taskArgs, hre) => {
+task("approve-router", "Will approve router")
+  .addParam('id', 'chainID') 
+  .setAction( async (taskArgs, hre) => {
   const signers = await hre.ethers.getSigners();
 
   const tribe = await createERC20(hre, TRIBE);
 
   const receipt = await tribe.approve(
-    TurboAddresses.ROUTER,
+    TurboAddresses[taskArgs.id].ROUTER,
     parseEther("50000000")
   );
 
   console.log({ receipt });
 });
 
-task("create-safe-and-deposit", "", async (taskArgs, hre) => {
-  const turboRouterContract = await createTurboRouter(hre);
+task("create-safe-and-deposit", "")
+  .addParam('id', 'chainID')
+  .setAction(async (taskArgs, hre) => {
+  const turboRouterContract = await createTurboRouter(hre, taskArgs.id);
   const receipt = await turboRouterContract.createSafeAndDeposit(
     "0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B",
     "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -44,15 +50,19 @@ task("create-safe-and-deposit", "", async (taskArgs, hre) => {
   console.log({ receipt });
 });
 
-task("router-create-safe", async (taskArgs, hre) => {
-  const turboRouterContract = await createTurboRouter(hre);
+task("router-create-safe")
+  .addParam('id', 'chainID')
+  .setAction( async (taskArgs, hre) => {
+  const turboRouterContract = await createTurboRouter(hre, taskArgs.id);
   const receipt = await turboRouterContract.createSafe(TRIBE);
 
   console.log({ receipt });
 });
 
-task("router-create-safe-and-deposit-and-boost", async (taskArgs, hre) => {
-  const turboRouterContract = await createTurboRouter(hre);
+task("router-create-safe-and-deposit-and-boost")
+  .addParam('id', 'chainID')
+  .setAction(async (taskArgs, hre) => {
+  const turboRouterContract = await createTurboRouter(hre, taskArgs.id);
 
   const receipt = turboRouterContract.createSafeAndDepositAndBoost
 })
@@ -61,6 +71,7 @@ task("", "Will deposit to given safe")
   .addParam("amount", "amount of TRIBE to collateralize")
   .addParam("vault", "Vault to boost")
   .addParam("boost", "Amount to boost")
+  .addParam('id', 'chainID')
   .setAction(async (taskArgs, hre) => {
   const signers = await hre.ethers.getSigners();
 
@@ -68,8 +79,8 @@ task("", "Will deposit to given safe")
 
   const amount = parseEther(taskArgs.amount);
 
-  const approvdeArgs = [TRIBE, TurboAddresses.ROUTER, amount]
-  const pullTokensArgs = [TRIBE, amount, TurboAddresses.ROUTER];
+  const approvdeArgs = [TRIBE, TurboAddresses[taskArgs.id].ROUTER, amount]
+  const pullTokensArgs = [TRIBE, amount, TurboAddresses[taskArgs.id].ROUTER];
   const createAndDepositAndBoostArgs = [TRIBE, userAddress, amount, amount, taskArgs.vault, parseEther(taskArgs.boost)];
 
   const encodeApprove = encodeRouterCall(
@@ -94,14 +105,14 @@ task("", "Will deposit to given safe")
 
   const hasApproval = await checkAllowance(
     userAddress,
-    TurboAddresses.ROUTER,
+    TurboAddresses[taskArgs.id].ROUTER,
     TRIBE,
     amount,
     signers[0]
   );
 
   const preBalanceRouter = await balanceOf(
-    TurboAddresses.ROUTER,
+    TurboAddresses[taskArgs.id].ROUTER,
     TRIBE,
     signers[0]
   );
@@ -109,14 +120,14 @@ task("", "Will deposit to given safe")
 
   let receipt
   if (hasApproval) {
-    receipt = await sendRouterWithMultiCall(hre, encodedCalls);
+    receipt = await sendRouterWithMultiCall(hre, encodedCalls, taskArgs.id);
   } else {
-    receipt = await sendRouterWithMultiCall(hre, approveFirst)
+    receipt = await sendRouterWithMultiCall(hre, approveFirst, taskArgs.id)
   }
 
 
   const postBalanceRouter = await balanceOf(
-    TurboAddresses.ROUTER,
+    TurboAddresses[taskArgs.id].ROUTER,
     TRIBE,
     signers[0]
   );
@@ -131,25 +142,29 @@ task("", "Will deposit to given safe")
 /**  Multicalls **/
 task(
   "get-constants",
-  "Will get constants with a multicall",
+  "Will get constants with a multicall")
+  .addParam('id', 'chainID')
+  .setAction(
   async (taskArgs, hre) => {
     const masterCall = encodeRouterCall(ITurboRouter, "master", []);
     const WETH9 = encodeRouterCall(ITurboRouter, "WETH9", []);
 
-    const answer = await callRouterWithMultiCall(hre, [masterCall, WETH9]);
+    const answer = await callRouterWithMultiCall(hre, [masterCall, WETH9], taskArgs.id);
 
     console.log({ answer });
   }
 );
 
-task("multicall-create-safe-and-deposit", async (taskArgs, hre) => {
+task("multicall-create-safe-and-deposit")
+  .addParam('id', 'chainID')
+  .setAction(async (taskArgs, hre) => {
   const signers = await hre.ethers.getSigners();
 
   const userAddress = signers[0].address;
 
   const amount = parseEther("1");
 
-  const pullTokensArgs = [TRIBE, amount, TurboAddresses.ROUTER];
+  const pullTokensArgs = [TRIBE, amount, TurboAddresses[taskArgs.id].ROUTER];
 
   const createAndDepositArgs = [TRIBE, userAddress, amount, amount];
 
@@ -169,7 +184,7 @@ task("multicall-create-safe-and-deposit", async (taskArgs, hre) => {
 
   const hasApproval = await checkAllowance(
     userAddress,
-    TurboAddresses.ROUTER,
+    TurboAddresses[taskArgs.id].ROUTER,
     TRIBE,
     amount,
     signers[0]
@@ -177,16 +192,16 @@ task("multicall-create-safe-and-deposit", async (taskArgs, hre) => {
 
   if (hasApproval) {
     const preBalanceRouter = await balanceOf(
-      TurboAddresses.ROUTER,
+      TurboAddresses[taskArgs.id].ROUTER,
       TRIBE,
       signers[0]
     );
     const preBalanceUser = await balanceOf(userAddress, TRIBE, signers[0]);
 
-    const answer = await sendRouterWithMultiCall(hre, encodedCalls);
+    const answer = await sendRouterWithMultiCall(hre, encodedCalls, taskArgs.id);
 
     const postBalanceRouter = await balanceOf(
-      TurboAddresses.ROUTER,
+      TurboAddresses[taskArgs.id].ROUTER,
       TRIBE,
       signers[0]
     );
@@ -204,18 +219,20 @@ task("multicall-create-safe-and-deposit", async (taskArgs, hre) => {
 /** Unit Funcs **/
 task(
   "pull-tokens",
-  "Will pull tokens into the router",
+  "Will pull tokens into the router")
+  .addParam('id', 'chainID')
+  .setAction(
   async (taskArgs, hre) => {
     const signers = await hre.ethers.getSigners();
 
     const tribe = await createERC20(hre, TRIBE);
-    const router = await createTurboRouter(hre);
+    const router = await createTurboRouter(hre, taskArgs.id);
 
     const amount = parseEther("1");
 
     // Check balance of Router before calling pullTokens
     const preBalanceRouter = await balanceOf(
-      TurboAddresses.ROUTER,
+      TurboAddresses[taskArgs.id].ROUTER,
       TRIBE,
       signers[0]
     );
@@ -227,7 +244,7 @@ task(
 
     const hasApproval = await checkAllowance(
       signers[0].address,
-      TurboAddresses.ROUTER,
+      TurboAddresses[taskArgs.id].ROUTER,
       TRIBE,
       amount,
       signers[0]
@@ -239,13 +256,13 @@ task(
       const receipt = await router.pullToken(
         TRIBE,
         amount,
-        TurboAddresses.ROUTER
+        TurboAddresses[taskArgs.id].ROUTER
       );
 
       console.log({ receipt });
 
       const postBalanceRouter = await balanceOf(
-        TurboAddresses.ROUTER,
+        TurboAddresses[taskArgs.id].ROUTER,
         TRIBE,
         signers[0]
       );
@@ -262,12 +279,14 @@ task(
 
 task(
   "check-router-approval",
-  "Checks if User has approved token for Router",
+  "Checks if User has approved token for Router")
+  .addParam('id', 'chainID')
+  .setAction(
   async (taskArgs, hre) => {
     const signers = await hre.ethers.getSigners();
     const approval = await checkAllowance(
       signers[0].address,
-      TurboAddresses.ROUTER,
+      TurboAddresses[taskArgs.id].ROUTER,
       TRIBE,
       parseEther("1"),
       signers[0]
@@ -284,11 +303,12 @@ const pullTokens = async (
   amount: BigNumber,
   signer: JsonRpcSigner,
   routerContract: Contract,
-  hre: HardhatRuntimeEnvironment
+  hre: HardhatRuntimeEnvironment,
+  id: number
 ) => {
   const hasApproval = await checkAllowance(
       userAddress,
-      TurboAddresses.ROUTER,
+      TurboAddresses[id].ROUTER,
       TRIBE,
       amount,
       signer
@@ -299,21 +319,21 @@ const pullTokens = async (
       receipt = await routerContract.pullToken(
           TRIBE,
           amount,
-          TurboAddresses.ROUTER
+          TurboAddresses[id].ROUTER
       );
 
   } else {
     const tribe = await createERC20(hre, TRIBE);
 
     await tribe.approve(
-      TurboAddresses.ROUTER,
+      TurboAddresses[id].ROUTER,
       amount
     );
 
     receipt = await routerContract.pullToken(
       TRIBE,
       amount,
-      TurboAddresses.ROUTER
+      TurboAddresses[id].ROUTER
     );
   }
 

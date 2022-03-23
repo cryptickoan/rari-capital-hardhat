@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-ethers";
-import { Contract } from "ethers";
+import { Contract, providers } from "ethers";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 // ABIS
@@ -12,6 +12,8 @@ import TurboLens from "../abis/TurboLens.sol/TurboLens.json";
 import TurboBooster from "../abis/TurboBooster.sol/TurboBooster.json";
 import TurboSafe from "../abis/TurboSafe.sol/TurboSafe.json";
 import TurboAuthority from "../abis/Auth.sol/Authority.json";
+import MultiRolesAuthority from "../abis/MultiRolesAuthority.sol/MultiRolesAuthority.json";
+import Oracle from '../../../../artifacts/contracts/oracles/MasterPriceOracle.sol/MasterPriceOracle.json'
 
 // Utils
 import { Interface } from "ethers/lib/utils";
@@ -19,11 +21,11 @@ import { TurboAddresses } from "../utils/constants";
 
 
 //** Contracts **/
-export const createTurboRouter = async (hre: HardhatRuntimeEnvironment) => {
+export const createTurboRouter = async (hre: HardhatRuntimeEnvironment, id: number) => {
   const signers = await hre.ethers.getSigners();
 
   const turboRouterContract = new Contract(
-    TurboAddresses.ROUTER,
+    TurboAddresses[id].ROUTER,
     TurboRouter.abi,
     signers[0]
   );
@@ -42,11 +44,11 @@ export const createERC20 = async (
   return erc20Contract;
 };
 
-export const createTurboMaster = async (hre: HardhatRuntimeEnvironment) => {
+export const createTurboMaster = async (hre: HardhatRuntimeEnvironment, id: number) => {
   const signers = await hre.ethers.getSigners();
-
+  
   const turboMasterContract = new Contract(
-    TurboAddresses.MASTER,
+    TurboAddresses[id].MASTER,
     TurboMaster.abi,
     signers[0]
   );
@@ -55,12 +57,13 @@ export const createTurboMaster = async (hre: HardhatRuntimeEnvironment) => {
 };
 
 export const createTurboComptroller = async (
-  hre: HardhatRuntimeEnvironment
+  hre: HardhatRuntimeEnvironment,
+  id: number
 ) => {
   const signers = await hre.ethers.getSigners();
 
   const turboRouterContract = new Contract(
-    TurboAddresses.COMPTROLLER,
+    TurboAddresses[id].COMPTROLLER,
     TurboComptroller,
     signers[0]
   );
@@ -68,11 +71,11 @@ export const createTurboComptroller = async (
   return turboRouterContract;
 };
 
-export const createTurboLens = async (hre: HardhatRuntimeEnvironment) => {
+export const createTurboLens = async (hre: HardhatRuntimeEnvironment, id: number) => {
   const signers = await hre.ethers.getSigners();
 
   const turboLens = new Contract(
-    TurboAddresses.LENS,
+    TurboAddresses[id].LENS,
     TurboLens.abi,
     signers[0]
   );
@@ -80,11 +83,11 @@ export const createTurboLens = async (hre: HardhatRuntimeEnvironment) => {
   return turboLens;
 };
 
-export const createTurboBooster = async (hre: HardhatRuntimeEnvironment) => {
+export const createTurboBooster = async (hre: HardhatRuntimeEnvironment, id: number) => {
   const signers = await hre.ethers.getSigners();
 
   const turboBoosterContract = new Contract(
-    TurboAddresses.BOOSTER,
+    TurboAddresses[id].BOOSTER,
     TurboBooster.abi,
     signers[0]
   );
@@ -104,6 +107,19 @@ export const createTurboSafe = async (
 };
 
 export const createTurboAuthority = async (
+  provider: providers.JsonRpcProvider | providers.Web3Provider,
+  authorityAddress: string
+) => {
+  const turboAuthorityContract = new Contract(
+    authorityAddress,
+    TurboAuthority.abi,
+    provider.getSigner()
+  );
+
+  return turboAuthorityContract;
+};
+
+export const createMultiRolesAuthority = async (
   hre: HardhatRuntimeEnvironment,
   authorityAddress: string
 ) => {
@@ -111,7 +127,7 @@ export const createTurboAuthority = async (
 
   const turboAuthorityContract = new Contract(
     authorityAddress,
-    TurboAuthority.abi,
+    MultiRolesAuthority.abi,
     signers[0]
   );
 
@@ -129,6 +145,16 @@ export const createCERC20 = async (hre: HardhatRuntimeEnvironment, tokenAddress:
   )
 
   return CERC20Contract
+}
+
+export const createOracle = async (provider: providers.Provider, oracleAddress: string) => {
+  const oracleContract = new Contract(
+    oracleAddress,
+    Oracle.abi,
+    provider
+  )
+
+  return oracleContract
 }
 
 

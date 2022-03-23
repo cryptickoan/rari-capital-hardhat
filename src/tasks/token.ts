@@ -4,6 +4,7 @@ import { task } from 'hardhat/config';
 //@ts-ignore
 import abi from 'erc-20-abi';
 import { commify } from 'ethers/lib/utils';
+import { impersonateAccount } from '../utils/impersonate';
 
 const getTokenInfo = (token: string) => {
     switch (token) {
@@ -97,3 +98,10 @@ const getTokenInfo = (token: string) => {
         )
       }
     );
+
+task('impersonate-account', 'Will impersonate given account')
+      .addParam('account', 'Account to impersonate')
+      .setAction(async (taskArgs, hre) => {
+
+        await impersonateAccount(hre.ethers.provider, taskArgs.account)
+})
